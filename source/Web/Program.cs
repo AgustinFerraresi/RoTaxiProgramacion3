@@ -22,16 +22,17 @@ builder.Services.AddScoped<IDriverService, DriverService>();
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 
-//var connection = new SqliteConnection("Data Source = DB-RoTaxiApp.db");
+var connection = new SqliteConnection("Data Source = DB-RoTaxiApp.db");
+connection.Open();
 
-//using (var command = connection.CreateCommand())
-//{
-//    command.CommandText = "PRAGMA journal_mode = DELETE;";
-//    command.ExecuteNonQuery();
-//}
+using (var command = connection.CreateCommand())
+{
+    command.CommandText = "PRAGMA journal_mode = DELETE;";
+    command.ExecuteNonQuery();
+}
 
-//builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlite(connection, b => b.MigrationsAssembly("Infrastructure")));
-builder.Services.AddDbContext<ApplicationContext>(DbContext => DbContext.UseSqlite("Data Source=TengoQueBorrarEsto"));
+builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlite(connection, b => b.MigrationsAssembly("Infrastructure")));
+//builder.Services.AddDbContext<ApplicationContext>(DbContext => DbContext.UseSqlite("Data Source=TengoQueBorrarEsto"));
 
 var app = builder.Build();
 
