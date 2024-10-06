@@ -1,7 +1,7 @@
 ﻿using Application.Interfaces;
+using Application.Request;
 using Domain.Classes;
 using Microsoft.AspNetCore.Mvc;
-
 
 namespace Web.Controllers
 {
@@ -16,13 +16,11 @@ namespace Web.Controllers
             _driverService = driverService;
         }
 
-        [HttpPost("[action]")]
-        public IActionResult RegisterDriver([FromBody] string name, string email,string password, int dni)
+        [HttpGet("[action]")]
+        public IActionResult CreateDriver([FromBody]DriverRequest request)
         {
-            var newDriver = new Driver(name, email, password, dni);
- 
-            _driverService.RegisterDriver(newDriver);
-            return Ok(newDriver);
+            var result = _driverService.CreateDriver(request);
+            return Ok(result);
         }
 
     }

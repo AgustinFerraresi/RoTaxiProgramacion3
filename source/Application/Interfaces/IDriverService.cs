@@ -1,4 +1,6 @@
-﻿using Domain.Classes;
+﻿using Application.Request;
+using Application.Response;
+using Domain.Classes;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -10,7 +12,7 @@ namespace Application.Interfaces
 {
     public interface IDriverService
     {
-        void RegisterDriver(Driver driver);
+        DriverDto CreateDriver(DriverRequest request);
         void DeleteDriver(Driver driver);
         List<Driver> GetAllDrivers();
         public Driver GetDriverById(int id);

@@ -1,4 +1,6 @@
 ﻿using Application.Interfaces;
+using Application.Request;
+using Application.Response;
 using Domain.Classes;
 using Domain.Interfaces;
 using System;
@@ -18,6 +20,13 @@ namespace Application.Services
             _driverRepository = driverRepository;
         }
 
+        public DriverDto CreateDriver(DriverRequest request)
+        {
+            Driver newDriver = new Driver(request.Name, request.Email, request.Password, request.Dni);
+            _driverRepository.Add(newDriver);
+            return DriverDto.Create(newDriver);
+        }
+
         //en cada uno de los metodos se puede usar logica adicional para hacer verificaciones y demas cosas si fuese necesario
         public void DeleteDriver(Driver driver)
         {
@@ -27,11 +36,6 @@ namespace Application.Services
         public List<Driver> GetAllDrivers()
         {
             return _driverRepository.GetAll();
-        }
-
-        public void RegisterDriver(Driver driver)
-        {
-            _driverRepository.Add(driver);
         }
 
         public Driver GetDriverById(int id)
