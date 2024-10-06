@@ -9,6 +9,6 @@ namespace Domain.Interfaces
 {
     public interface IPassengerRepository : IBaseRepository<Passenger>
     {
-        //como no tiene de momento ningun metodo extra no se le agrega nada acá
+        
     }
 }

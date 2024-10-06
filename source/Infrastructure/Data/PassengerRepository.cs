@@ -11,14 +11,15 @@ namespace Infrastructure.Data
 {
     public class PassengerRepository : BaseRepository<Passenger>, IPassengerRepository
     {
+        private readonly ApplicationContext _context;
         public PassengerRepository(ApplicationContext context) : base(context)
         {
 
         }
+
+        public Passenger? GetPassengerById(int id)
+        {
+            return _context.Passengers.FirstOrDefault(passenger => passenger.Id == id);
+        }
     }
 }
-
-
-
-//El IpassengerRepository se implementa aca por si hubiese algun metodo que no esta en baseRepository
-//static List<Passenger> passengers = []; //aca se guardan los pasajeros mas adelante sera en la db

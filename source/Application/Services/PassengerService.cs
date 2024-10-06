@@ -1,4 +1,6 @@
 ﻿using Application.Interfaces;
+using Application.Request;
+using Application.Response;
 using Domain.Classes;
 using Domain.Interfaces;
 using System;
@@ -21,19 +23,26 @@ namespace Application.Services
             _passengerRepository = passengerRepository;
         }
 
-        public void RegisterPassenger(Passenger passenger) 
+        public PassengerDto CreatePassenger(PassengerRequest request)
         {
-            _passengerRepository.Add(passenger);
+            Passenger newPassenger = new Passenger(request.Name, request.Email, request.Password, request.Dni, request.Location, request.Destination);
+            _passengerRepository.Add(newPassenger);
+            return PassengerDto.Create(newPassenger);
         }
 
-        public void DeletePassenger(Passenger passenger) 
+        public void DeletePassenger(Passenger passenger)
         {
-            _passengerRepository.Delete(passenger);
+            throw new NotImplementedException();
         }
 
-        public void GetPassengers()
+        public List<Passenger> GetAllPassenger()
         {
-            _passengerRepository.GetAll();
+            throw new NotImplementedException();
+        }
+
+        public Passenger GetPassengerById(int id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Application.Interfaces;
+using Application.Request;
+using Domain.Classes;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
@@ -10,19 +13,44 @@ namespace Web.Controllers
     [ApiController]
     public class PassengerController : ControllerBase
     {
+        private readonly IPassangerService _passangerService;
 
-        //inyectar userRepo en userService
-        //userService inyectar en este controller
-        //guardar los usuario en una lista estatica en el repo mas adelante lo hacemos en la bd
-        //[HttpPost]
-        //public IActionResult CreateUser([FromBody]string name,string email,string password,int dni,string message,string location,string destination)
-        //{
-
-        //}
-        [HttpGet]
-        public IActionResult a()
+        public PassengerController(IPassangerService passangerService)
         {
-            return Ok("");
+            _passangerService = passangerService;
         }
+
+        [HttpPost("[action]")]
+        public IActionResult CreatePassenger([FromBody] PassengerRequest request)
+        {
+            var result =  _passangerService.CreatePassenger(request);
+            return Ok(result);
+        }
+
+        //[HttpPost("[action]")]
+        //public IActionResult DeleteVehicle(Vehicle vehicle)
+        //{
+        //    _vehicleService.DeleteVehicle(vehicle);
+        //    return Ok("Vehiculo eliminado correctamente");
+        //}
+
+        //[HttpGet("[action]")]
+        //public IActionResult GetAllVehicles()
+        //{
+        //    List<Vehicle> vehicles = _vehicleService.GetAllVehicles();
+        //    return Ok(vehicles);
+        //}
+
+        //[HttpGet]
+        //public IActionResult GetVehicleById([FromBody] int id)
+        //{
+        //    Vehicle vehicle = _vehicleService.GetVehicleById(id);
+        //    if (vehicle != null)
+        //    {
+        //        return Ok(vehicle);
+        //    }
+
+        //    return BadRequest(vehicle);
+        //}
     }
 }

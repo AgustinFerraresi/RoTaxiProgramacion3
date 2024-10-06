@@ -5,19 +5,25 @@ namespace Domain.Classes
 {
     public abstract class User
     {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+
+        [Required]
         public string Name { get; set; }
 
-        //[Key]
-        //[DatabaseGenerated(DatabaseGeneratedOption.Identity)] //esto funcionara cuando tengamos el context
-        public int Id { get; set; }
+        [Required]
         public string Email { get; set; }
+
+        [Required]
         public string Password { get; set; }
+
+        [Required]
         public int Dni { get; set; }
         
         public User(string name, string email, string password,int dni)
         {
             Name = name;
-            Id = 0;
             Email = email;
             Password = password;
             Dni = dni;
