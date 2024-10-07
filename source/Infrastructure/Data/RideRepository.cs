@@ -14,7 +14,7 @@ namespace Infrastructure.Data
 
         public RideRepository(ApplicationContext context) : base(context)
         {
-            
+            _context = context;
         }
 
         public Ride GetRideById(int id)

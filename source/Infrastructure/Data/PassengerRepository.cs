@@ -14,7 +14,7 @@ namespace Infrastructure.Data
         private readonly ApplicationContext _context;
         public PassengerRepository(ApplicationContext context) : base(context)
         {
-
+            _context = context;
         }
 
         public Passenger? GetPassengerById(int id)

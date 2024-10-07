@@ -14,7 +14,7 @@ namespace Infrastructure.Data
         private readonly ApplicationContext _context;
         public VehicleRepository(ApplicationContext context) : base(context)
         {
-
+            _context = context;
         }
 
         public Vehicle? GetVehicleById(int id)
