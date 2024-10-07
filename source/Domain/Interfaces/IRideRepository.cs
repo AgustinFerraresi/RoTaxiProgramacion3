@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces
 {
-    public interface IBaseRepository<T> where T : class
+    public interface IRideRepository : IBaseRepository<Ride>
     {
-        void Add(T entity);
-        void Delete(T entity);
-        List<T> GetAll();
+        Ride GetRideById(int id);
     }
 }

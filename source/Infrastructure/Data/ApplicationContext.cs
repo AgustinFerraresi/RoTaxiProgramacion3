@@ -14,7 +14,7 @@ namespace Infrastructure.Data
         public DbSet<Passenger> Passengers { get; set; }
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
-
+        public DbSet<Ride> Rides { get; set; }
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
         }
