@@ -22,6 +22,9 @@ builder.Services.AddScoped<IDriverService, DriverService>();
 builder.Services.AddScoped<IVehicleRepository, VehicleRepository>();
 builder.Services.AddScoped<IVehicleService, VehicleService>();
 
+builder.Services.AddScoped<IRideRepository, RideRepository>();
+builder.Services.AddScoped<IRideService, RideService>();
+
 var connection = new SqliteConnection("Data Source = DB-RoTaxiApp.db");
 connection.Open();
 
