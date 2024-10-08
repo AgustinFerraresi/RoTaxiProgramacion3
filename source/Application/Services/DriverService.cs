@@ -2,6 +2,7 @@
 using Application.Request;
 using Application.Response;
 using Domain.Classes;
+using Domain.Exceptions;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class DriverService : IDriverService 
+    public class DriverService : IDriverService
     {
         private readonly IDriverRepository _driverRepository;
 
@@ -28,11 +29,16 @@ namespace Application.Services
         }
 
         //en cada uno de los metodos se puede usar logica adicional para hacer verificaciones y demas cosas si fuese necesario
-        public void DeleteDriver(Driver driver)
+        public void DeleteDriver(int id)
         {
+            var driver = _driverRepository.GetById(id);
+            if (driver == null)
+            {
+                throw new NotFoundException("Driver not found.");
+            }
             _driverRepository.Delete(driver);
         }
-
+        
         public List<Driver> GetAllDrivers()
         {
             return _driverRepository.GetAll();
