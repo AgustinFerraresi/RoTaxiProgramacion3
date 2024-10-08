@@ -1,6 +1,6 @@
 ﻿using Application.Interfaces;
-using Application.Request;
-using Application.Response;
+using Application.Models;
+using Application.Models.Request;
 using Domain.Classes;
 using Domain.Interfaces;
 using System;

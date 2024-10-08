@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Request
+namespace Application.Models.Request
 {
     public class RideRequest
     {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Request
+namespace Application.Models.Request
 {
     //este dto es el que estará en el controller para crear un vehiculo
     public class CreateVehicleRequest

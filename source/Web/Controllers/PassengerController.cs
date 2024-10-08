@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using Application.Request;
+using Application.Models.Request;
 using Domain.Classes;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
@@ -22,7 +22,7 @@ namespace Web.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult CreatePassenger([FromBody] PassengerRequest request)
+        public IActionResult CreatePassenger([FromBody] PassengerCreateRequest request)
         {
             var result =  _passangerService.CreatePassenger(request);
             return Ok(result);
@@ -56,6 +56,20 @@ namespace Web.Controllers
                 return NoContent();
             }
             catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdatePassenger([FromRoute] int id, [FromBody] PassengerUpdateRequest request)
+        {
+            try
+            {
+                _passangerService.UpdatePassenger(id, request);
+                return NoContent();
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }

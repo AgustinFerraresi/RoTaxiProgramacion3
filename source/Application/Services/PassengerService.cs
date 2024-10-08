@@ -1,6 +1,6 @@
 ﻿using Application.Interfaces;
-using Application.Request;
-using Application.Response;
+using Application.Models;
+using Application.Models.Request;
 using Domain.Classes;
 using Domain.Exceptions;
 using Domain.Interfaces;
@@ -24,7 +24,7 @@ namespace Application.Services
             _passengerRepository = passengerRepository;
         }
 
-        public PassengerDto CreatePassenger(PassengerRequest request)
+        public PassengerDto CreatePassenger(PassengerCreateRequest request)
         {
             Passenger newPassenger = new Passenger(request.Name, request.Email, request.Password, request.Dni, request.Location, request.Destination);
             _passengerRepository.Add(newPassenger);
@@ -51,6 +51,20 @@ namespace Application.Services
         {
             var passenger = _passengerRepository.GetById(id);
             return passenger != null ? PassengerDto.Create(passenger) : null;
+        }
+
+        public void UpdatePassenger(int id, PassengerUpdateRequest request)
+        {
+            var passenger = _passengerRepository.GetById(id) ?? throw new NotFoundException($"Pasajero {id} no encontrado.");
+
+            passenger.Name = request.Name ?? passenger.Name;
+            passenger.Email = request.Email ?? passenger.Email;
+            passenger.Password = request.Password ?? passenger.Password;
+            passenger.Dni = request.Dni ?? passenger.Dni;
+            passenger.Location = request.Location ?? passenger.Location;
+            passenger.Destination = request.Destination ?? passenger.Destination;
+
+            _passengerRepository.Update(passenger);
         }
     }
 }
