@@ -12,8 +12,8 @@ namespace Application.Interfaces
     public interface IPassangerService
     {
         PassengerDto CreatePassenger(PassengerRequest request);
-        void DeletePassenger(Passenger passenger);
-        List<Passenger> GetAllPassenger();
-        Passenger GetPassengerById(int id);
+        void DeletePassenger(int id);
+        List<PassengerDto> GetAllPassenger();
+        PassengerDto? GetPassengerById(int id);
     }
 }

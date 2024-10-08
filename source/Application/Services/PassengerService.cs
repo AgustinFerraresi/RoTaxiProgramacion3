@@ -2,6 +2,7 @@
 using Application.Request;
 using Application.Response;
 using Domain.Classes;
+using Domain.Exceptions;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -30,19 +31,26 @@ namespace Application.Services
             return PassengerDto.Create(newPassenger);
         }
 
-        public void DeletePassenger(Passenger passenger)
+        public void DeletePassenger(int id)
         {
-            throw new NotImplementedException();
+            var passenger = _passengerRepository.GetById(id);
+            if (passenger == null)
+            {
+                throw new NotFoundException("Passenger not found.");
+            }
+            _passengerRepository.Delete(passenger);
         }
 
-        public List<Passenger> GetAllPassenger()
+        public List<PassengerDto> GetAllPassenger()
         {
-            throw new NotImplementedException();
+            var passengers = _passengerRepository.GetAll();
+            return passengers.Select(PassengerDto.Create).ToList();
         }
 
-        public Passenger GetPassengerById(int id)
+        public PassengerDto? GetPassengerById(int id)
         {
-            throw new NotImplementedException();
+            var passenger = _passengerRepository.GetById(id);
+            return passenger != null ? PassengerDto.Create(passenger) : null;
         }
     }
 }
