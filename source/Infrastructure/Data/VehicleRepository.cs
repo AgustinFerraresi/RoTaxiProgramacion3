@@ -27,6 +27,8 @@ namespace Infrastructure.Data
 
 //aca lo que se hace es inyectar el contexto en la siguiente linea:
 //"private readonly ApplicationContext _context;"
-//pero en lugar de inicializarlo en el constructor de esta clase lo que hago es pasarselo al constructor de
-//la clase padre osea BaseRepository que ahi si será inicializado en su constructor
+//y lo que hago es pasarselo al constructor de la clase padre osea BaseRepository que será inicializado en su constructor
 //asi es como paso el contexto al padre: "public VehicleRepository(ApplicationContext context) : base(context)"
+//pero ademas tengo que iniciarlizarlo en este constructor ya que tengo un metodo exclusivo de este repositorio por lo cual
+//aca tambien necesito el contexto
+
