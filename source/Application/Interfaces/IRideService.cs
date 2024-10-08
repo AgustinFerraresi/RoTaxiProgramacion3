@@ -12,10 +12,10 @@ namespace Application.Interfaces
 {
     public interface IRideService
     {
-        public RideDto CreateRide(RideRequest request);
-
-        public void CanceleRide(Ride ride); //no estoy seguro si este metodo esta bien
-
-        public List<Ride> GetAllRides();
+        List<RideDto> GetAll();
+        RideDto? GetById(int id);
+        RideDto Create(RideCreateRequest request);
+        void Delete(int id);
+        
     }
 }

@@ -17,11 +17,5 @@ namespace Domain.Classes
         public DateTime Date { get; set; }
         public float Cost { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
-        public Ride(float cost, PaymentMethod paymentMethod)
-        {
-            Date = DateTime.Now;
-            Cost = cost;
-            PaymentMethod = paymentMethod;
-        }
     }
 }
