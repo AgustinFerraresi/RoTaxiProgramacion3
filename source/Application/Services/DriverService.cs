@@ -51,14 +51,16 @@ namespace Application.Services
 
             _driverRepository.Update(driver);
         }
-        public List<Driver> GetAllDrivers()
+        public List<DriverDto> GetAllDrivers()
         {
-            return _driverRepository.GetAll();
+            var driver = _driverRepository.GetAll();
+            return driver.Select(DriverDto.Create).ToList();
         }
 
-        public Driver GetDriverById(int id)
+        public DriverDto? GetDriverById(int id)
         {
-            return _driverRepository.GetById(id);
+            var driver = _driverRepository.GetById(id);
+            return driver != null ? DriverDto.Create(driver) : null;
         }
 
     }
