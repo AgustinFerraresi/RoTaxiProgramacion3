@@ -2,6 +2,7 @@
 using Application.Models;
 using Application.Models.Request;
 using Domain.Classes;
+using Domain.Exceptions;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -28,11 +29,28 @@ namespace Application.Services
         }
 
         //en cada uno de los metodos se puede usar logica adicional para hacer verificaciones y demas cosas si fuese necesario
-        public void DeleteDriver(Driver driver)
+        public void DeleteDriver(int id)
         {
+            var driver = _driverRepository.GetById(id);
+            if (driver == null)
+            {
+                throw new NotFoundException("Passenger not found.");
+            }
             _driverRepository.Delete(driver);
         }
 
+        public void UpdateDriver(int id, DriveUpdateRequest request)
+        {
+            var driver = _driverRepository.GetById(id) ?? throw new NotFoundException($"Pasajero {id} no encontrado.");
+
+            driver.Name = request.Name ?? driver.Name;
+            driver.Email = request.Email ?? driver.Email;
+            driver.Password = request.Password ?? driver.Password;
+            driver.Dni = request.Dni ?? driver.Dni;
+  
+
+            _driverRepository.Update(driver);
+        }
         public List<Driver> GetAllDrivers()
         {
             return _driverRepository.GetAll();
