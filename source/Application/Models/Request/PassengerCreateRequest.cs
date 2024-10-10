@@ -16,10 +16,3 @@ namespace Application.Models.Request
         public string Destination { get; set; }
     }
 }
-
-
-//public Passenger(string name, string email, string password, int dni, string location, string destination) : base(name, email, password, dni)
-//        {
-//    Location = location;
-//    Destination = destination;
-//}

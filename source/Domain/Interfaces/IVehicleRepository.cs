@@ -9,7 +9,6 @@ namespace Domain.Interfaces
 {
     public interface IVehicleRepository : IBaseRepository<Vehicle>
     {
-        Vehicle GetVehicleById(int id);
-        //metodo extra para esta interfaz
+        //Vehicle GetVehicleById(int id);
     }
 }

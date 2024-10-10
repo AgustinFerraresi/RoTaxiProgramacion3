@@ -17,10 +17,10 @@ namespace Infrastructure.Data
             _context = context;
         }
 
-        public Vehicle? GetVehicleById(int id)
-        {
-            return _context.Vehicles.FirstOrDefault(vehicle => vehicle.Id == id);
-        }
+        //public Vehicle? GetVehicleById(int id)
+        //{
+        //    return _context.Vehicles.FirstOrDefault(vehicle => vehicle.Id == id);
+        //}
     }
 }
 

@@ -1,6 +1,7 @@
 ﻿using Application.Models;
 using Application.Models.Request;
 using Domain.Classes;
+using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,12 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface IVehicleService
+    public interface IVehicleService 
     {
         VehicleDto CreateVehicle(CreateVehicleRequest request);
-        void DeleteVehicle(Vehicle vehicle);
-        List<Vehicle> GetAllVehicles();
-        Vehicle GetVehicleById(int id);
+        bool DeleteVehicle(int id);
+        List<VehicleDto> GetAllVehicles();
+        VehicleDto GetVehicleById(int id);
+        VehicleDto UpdateVehicle(VehicleUpdateRequest request, int id);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Models;
 using Application.Models.Request;
 using Domain.Classes;
 using Domain.Interfaces;
@@ -26,34 +27,41 @@ namespace Web.Controllers
         [HttpPost("[action]")]
         public IActionResult CreateVehicle([FromBody] CreateVehicleRequest request)
         {
-            var result = _vehicleService.CreateVehicle(request);
+            VehicleDto result = _vehicleService.CreateVehicle(request);
             return Ok(result);
         }
 
-        [HttpPost("[action]")]
-        public IActionResult DeleteVehicle(Vehicle vehicle)
+        [HttpDelete("{id}")]
+        public IActionResult DeleteVehicle(int id)
         {
-            _vehicleService.DeleteVehicle(vehicle);
-            return Ok("Vehiculo eliminado correctamente");
+            var result = _vehicleService.DeleteVehicle(id);
+            return result ? Ok("El vehiculo se eliminó exitosamente") : Ok("Error el eliminar el vehiculo");
         }
 
         [HttpGet("[action]")]
         public IActionResult GetAllVehicles()
         {
-            List<Vehicle> vehicles = _vehicleService.GetAllVehicles();
+            List<VehicleDto> vehicles = _vehicleService.GetAllVehicles();
             return Ok(vehicles);            
         }
 
-        [HttpGet]
-        public IActionResult GetVehicleById([FromBody] int id)
+        [HttpGet("id/{id}")]
+        public IActionResult GetVehicleById(int id)
         {
-            Vehicle vehicle = _vehicleService.GetVehicleById(id);
+            var vehicle = _vehicleService.GetVehicleById(id);
             if (vehicle != null)
             {
                 return Ok(vehicle);
             }
 
             return BadRequest(vehicle);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateVehicle([FromBody] VehicleUpdateRequest request, int id)
+        {
+            var result = _vehicleService.UpdateVehicle(request, id);
+            return Ok(result);
         }
     }
 }

@@ -31,22 +31,38 @@ namespace Application.Services
         //el metodo que creará al dto es un metodo static lo cual permite ser llamado sin la necesidad de que la clase sea instanciada
         //los metodos static pertenecen a la clase y no al objeto por lo que al llamarlos se llama a la clase
 
-        public void DeleteVehicle(Vehicle vehicle)
+        public bool DeleteVehicle(int id)
         {
-            _vehicleRepository.Delete(vehicle);
+            var vehicleToDelete = _vehicleRepository.GetById(id);
+            if (vehicleToDelete != null)
+            {
+                _vehicleRepository.Delete(vehicleToDelete);
+                return true;
+            }
+            return false;
+        }
+        
+        public VehicleDto GetVehicleById(int id)
+        {
+            var vehicle = _vehicleRepository.GetById(id);
+            return vehicle != null ? VehicleDto.Create(vehicle) : null; 
         }
 
-        public Vehicle GetVehicleById(int id)
+        public List<VehicleDto> GetAllVehicles()
         {
-            return _vehicleRepository.GetVehicleById(id);
+            var vehicles = _vehicleRepository.GetAll();
+            return vehicles.Select(vehicle => VehicleDto.Create(vehicle)).ToList();
         }
 
-        //GetByVehicleById
-        public List<Vehicle> GetAllVehicles()
+        public VehicleDto UpdateVehicle(VehicleUpdateRequest request,int id)
         {
-            return _vehicleRepository.GetAll();
+            Vehicle vehicleToUpdate = _vehicleRepository.GetById(id);
+            vehicleToUpdate.Brand = request.brand ?? vehicleToUpdate.Brand;
+            vehicleToUpdate.Model = request.model ?? vehicleToUpdate.Model;
+            vehicleToUpdate.Year = request.year.HasValue ? request.year.Value : vehicleToUpdate.Year;
+
+            _vehicleRepository.Update(vehicleToUpdate);
+            return VehicleDto.Create(vehicleToUpdate);
         }
-
-
     }
 }
