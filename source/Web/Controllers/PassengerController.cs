@@ -1,6 +1,7 @@
 ﻿using Application.Interfaces;
-using Application.Request;
+using Application.Models.Request;
 using Domain.Classes;
+using Domain.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -21,11 +22,59 @@ namespace Web.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult CreatePassenger([FromBody] PassengerRequest request)
+        public IActionResult CreatePassenger([FromBody] PassengerCreateRequest request)
         {
             var result =  _passangerService.CreatePassenger(request);
             return Ok(result);
         }
+
+        [HttpGet]
+        public IActionResult GetAllPassenger()
+        {
+            return Ok(_passangerService.GetAllPassenger());
+        }
+
+        [HttpGet("id/{id}")]
+        public IActionResult GetPassengerById(int id) 
+        {
+            try
+            {
+                return Ok(_passangerService.GetPassengerById(id));
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeletePassenger([FromRoute] int id)
+        {
+            try
+            {
+                _passangerService.DeletePassenger(id);
+                return NoContent();
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdatePassenger([FromRoute] int id, [FromBody] PassengerUpdateRequest request)
+        {
+            try
+            {
+                _passangerService.UpdatePassenger(id, request);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
 
         //[HttpPost("[action]")]
         //public IActionResult DeleteVehicle(Vehicle vehicle)

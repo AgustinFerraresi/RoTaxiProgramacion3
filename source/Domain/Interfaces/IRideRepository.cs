@@ -9,6 +9,6 @@ namespace Domain.Interfaces
 {
     public interface IRideRepository : IBaseRepository<Ride>
     {
-        Ride GetRideById(int id);
+        
     }
 }

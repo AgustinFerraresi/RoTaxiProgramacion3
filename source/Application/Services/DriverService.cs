@@ -1,7 +1,8 @@
 ﻿using Application.Interfaces;
-using Application.Request;
-using Application.Response;
+using Application.Models;
+using Application.Models.Request;
 using Domain.Classes;
+using Domain.Exceptions;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -28,19 +29,38 @@ namespace Application.Services
         }
 
         //en cada uno de los metodos se puede usar logica adicional para hacer verificaciones y demas cosas si fuese necesario
-        public void DeleteDriver(Driver driver)
+        public void DeleteDriver(int id)
         {
+            var driver = _driverRepository.GetById(id);
+            if (driver == null)
+            {
+                throw new NotFoundException("Passenger not found.");
+            }
             _driverRepository.Delete(driver);
         }
 
-        public List<Driver> GetAllDrivers()
+        public void UpdateDriver(int id, DriveUpdateRequest request)
         {
-            return _driverRepository.GetAll();
+            var driver = _driverRepository.GetById(id) ?? throw new NotFoundException($"Pasajero {id} no encontrado.");
+
+            driver.Name = request.Name ?? driver.Name;
+            driver.Email = request.Email ?? driver.Email;
+            driver.Password = request.Password ?? driver.Password;
+            driver.Dni = request.Dni ?? driver.Dni;
+  
+
+            _driverRepository.Update(driver);
+        }
+        public List<DriverDto> GetAllDrivers()
+        {
+            var driver = _driverRepository.GetAll();
+            return driver.Select(DriverDto.Create).ToList();
         }
 
-        public Driver GetDriverById(int id)
+        public DriverDto? GetDriverById(int id)
         {
-            return _driverRepository.GetById(id);
+            var driver = _driverRepository.GetById(id);
+            return driver != null ? DriverDto.Create(driver) : null;
         }
 
     }

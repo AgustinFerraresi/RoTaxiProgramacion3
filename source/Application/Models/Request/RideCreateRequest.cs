@@ -5,10 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Request
+namespace Application.Models.Request
 {
-    public class RideRequest
+    public class RideCreateRequest
     {
+        public DateTime Date { get; set; }
         public float Cost { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
     }

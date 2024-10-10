@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Request
+namespace Application.Models.Request
 {
-    public class PassengerRequest
+    public class PassengerCreateRequest
     {
         public string Name { get; set; }
         public string Email { get; set; }

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Response
+namespace Application.Models
 {
     //este es el dto de respuesta
     public class VehicleDto

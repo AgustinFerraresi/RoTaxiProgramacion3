@@ -1,7 +1,8 @@
 ﻿using Application.Interfaces;
-using Application.Request;
-using Application.Response;
+using Application.Models;
+using Application.Models.Request;
 using Domain.Classes;
+using Domain.Exceptions;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -23,26 +24,47 @@ namespace Application.Services
             _passengerRepository = passengerRepository;
         }
 
-        public PassengerDto CreatePassenger(PassengerRequest request)
+        public PassengerDto CreatePassenger(PassengerCreateRequest request)
         {
             Passenger newPassenger = new Passenger(request.Name, request.Email, request.Password, request.Dni, request.Location, request.Destination);
             _passengerRepository.Add(newPassenger);
             return PassengerDto.Create(newPassenger);
         }
 
-        public void DeletePassenger(Passenger passenger)
+        public void DeletePassenger(int id)
         {
-            throw new NotImplementedException();
+            var passenger = _passengerRepository.GetById(id);
+            if (passenger == null)
+            {
+                throw new NotFoundException("Passenger not found.");
+            }
+            _passengerRepository.Delete(passenger);
         }
 
-        public List<Passenger> GetAllPassenger()
+        public List<PassengerDto> GetAllPassenger()
         {
-            throw new NotImplementedException();
+            var passengers = _passengerRepository.GetAll();
+            return passengers.Select(PassengerDto.Create).ToList();
         }
 
-        public Passenger GetPassengerById(int id)
+        public PassengerDto? GetPassengerById(int id)
         {
-            throw new NotImplementedException();
+            var passenger = _passengerRepository.GetById(id);
+            return passenger != null ? PassengerDto.Create(passenger) : null;
+        }
+
+        public void UpdatePassenger(int id, PassengerUpdateRequest request)
+        {
+            var passenger = _passengerRepository.GetById(id) ?? throw new NotFoundException($"Pasajero {id} no encontrado.");
+
+            passenger.Name = request.Name ?? passenger.Name;
+            passenger.Email = request.Email ?? passenger.Email;
+            passenger.Password = request.Password ?? passenger.Password;
+            passenger.Dni = request.Dni ?? passenger.Dni;
+            passenger.Location = request.Location ?? passenger.Location;
+            passenger.Destination = request.Destination ?? passenger.Destination;
+
+            _passengerRepository.Update(passenger);
         }
     }
 }

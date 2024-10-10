@@ -1,7 +1,8 @@
 ﻿using Application.Interfaces;
-using Application.Request;
-using Application.Response;
+using Application.Models;
+using Application.Models.Request;
 using Domain.Classes;
+using Domain.Exceptions;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -20,20 +21,37 @@ namespace Application.Services
             _rideRepository = rideRepository;
         }
 
-        public RideDto CreateRide(RideRequest request)
+        public List<RideDto> GetAll()
         {
-            var newRide = new Ride(request.Cost, request.PaymentMethod);
-            _rideRepository.Add(newRide);
-            return RideDto.Create(newRide);
-        }
-        public void CanceleRide(Ride ride)
+            var rides = _rideRepository.GetAll();
+            return rides.Select(RideDto.Create).ToList();
+        } 
+
+        public RideDto? GetById(int id)
         {
-            throw new NotImplementedException();
+            var ride = _rideRepository.GetById(id);
+            return ride != null ? RideDto.Create(ride) : null;
         }
 
-        public List<Ride> GetAllRides()
+        public RideDto Create(RideCreateRequest request)
         {
-            throw new NotImplementedException();
+            Ride ride = new Ride();
+            ride.Date = request.Date;
+            ride.Cost = request.Cost;
+            ride.PaymentMethod = request.PaymentMethod;
+
+            _rideRepository.Add(ride);
+            return RideDto.Create(ride);
+        }
+
+        public void Delete(int id)
+        {
+            var passenger = _rideRepository.GetById(id);
+            if (passenger == null)
+            {
+                throw new NotFoundException("Passenger not found.");
+            }
+            _rideRepository.Delete(passenger);
         }
     }
 }

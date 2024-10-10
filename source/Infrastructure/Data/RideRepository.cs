@@ -17,9 +17,5 @@ namespace Infrastructure.Data
             _context = context;
         }
 
-        public Ride GetRideById(int id)
-        {
-            return _context.Rides.FirstOrDefault(ride => ride.Id == id);
-        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Application.Interfaces;
-using Application.Request;
+using Application.Models.Request;
 using Domain.Classes;
 using Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
