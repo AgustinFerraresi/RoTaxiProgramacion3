@@ -12,10 +12,10 @@ namespace Application.Interfaces
 {
     public interface IDriverService
     {
-        DriverDto CreateDriver(DriverRequest request);
+        DriverDto CreateDriver(DriverCreateRequest request);
         void DeleteDriver(int id);
         void UpdateDriver(int id, DriverUpdateRequest request);
         List<DriverDto> GetAllDrivers();
-        public DriverDto GetDriverById(int id);
+        DriverDto? GetDriverById(int id);
     }
 }

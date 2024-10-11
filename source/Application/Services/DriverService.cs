@@ -21,7 +21,7 @@ namespace Application.Services
             _driverRepository = driverRepository;
         }
 
-        public DriverDto CreateDriver(DriverRequest request)
+        public DriverDto CreateDriver(DriverCreateRequest request)
         {
             Driver newDriver = new Driver(request.Name, request.Email, request.Password, request.Dni);
             _driverRepository.Add(newDriver);
