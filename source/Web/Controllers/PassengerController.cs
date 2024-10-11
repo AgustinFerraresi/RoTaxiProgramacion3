@@ -22,16 +22,16 @@ namespace Web.Controllers
         }
 
         [HttpPost("[action]")]
-        public IActionResult CreatePassenger([FromBody] PassengerCreateRequest request)
+        public IActionResult Create([FromBody] PassengerCreateRequest request)
         {
-            var result =  _passangerService.CreatePassenger(request);
+            var result =  _passangerService.Create(request);
             return Ok(result);
         }
 
         [HttpGet]
-        public IActionResult GetAllPassenger()
+        public IActionResult GetAll()
         {
-            return Ok(_passangerService.GetAllPassenger());
+            return Ok(_passangerService.GetAll());
         }
 
         [HttpGet("id/{id}")]
@@ -39,7 +39,7 @@ namespace Web.Controllers
         {
             try
             {
-                return Ok(_passangerService.GetPassengerById(id));
+                return Ok(_passangerService.GetById(id));
             }
             catch (NotFoundException ex)
             {
@@ -48,11 +48,11 @@ namespace Web.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeletePassenger([FromRoute] int id)
+        public IActionResult Delete([FromRoute] int id)
         {
             try
             {
-                _passangerService.DeletePassenger(id);
+                _passangerService.Delete(id);
                 return NoContent();
             }
             catch (NotFoundException ex)
@@ -62,11 +62,11 @@ namespace Web.Controllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdatePassenger([FromRoute] int id, [FromBody] PassengerUpdateRequest request)
+        public IActionResult Update([FromRoute] int id, [FromBody] PassengerUpdateRequest request)
         {
             try
             {
-                _passangerService.UpdatePassenger(id, request);
+                _passangerService.Update(id, request);
                 return NoContent();
             }
             catch (Exception ex)
