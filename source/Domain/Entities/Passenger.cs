@@ -9,16 +9,10 @@ namespace Domain.Classes
 {
     public class Passenger : User
     {
-        [Required]
-        public string Location { get; set; }
+        public string? Description { get; set; }
 
-        [Required]
-        public string Destination { get; set; }
-
-        public Passenger(string name, string email, string password,int dni , string location, string destination) : base(name, email, password,dni)
+        public Passenger(string name, string email, string password, int dni) : base(name, email, password, dni)
         {
-            Location = location;
-            Destination = destination;
         }
     }
 }

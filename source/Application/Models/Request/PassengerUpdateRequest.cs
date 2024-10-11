@@ -12,7 +12,6 @@ namespace Application.Models.Request
         public string? Email { get; set; }
         public string? Password { get; set; }
         public int? Dni { get; set; }
-        public string? Location { get; set; }
-        public string? Destination { get; set; }
+        public string Description { get; set; }
     }
 }

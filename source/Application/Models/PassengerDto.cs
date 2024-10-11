@@ -1,6 +1,7 @@
 ﻿using Domain.Classes;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,8 +14,8 @@ namespace Application.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int Dni { get; set; }
-        public string Location { get; set; }
-        public string Destination { get; set; }
+        public string Description { get; set; }
+ 
 
         public static PassengerDto Create(Passenger passenger)
         {
@@ -22,9 +23,8 @@ namespace Application.Models
             dto.Id = passenger.Id;
             dto.Name = passenger.Name;
             dto.Dni = passenger.Dni;
-            dto.Location = passenger.Location;
-            dto.Destination = passenger.Destination;
-
+            dto.Description = passenger.Description;            
+      
             return dto;
         }
     }

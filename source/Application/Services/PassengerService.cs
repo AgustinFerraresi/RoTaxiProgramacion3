@@ -24,14 +24,15 @@ namespace Application.Services
             _passengerRepository = passengerRepository;
         }
 
-        public PassengerDto CreatePassenger(PassengerCreateRequest request)
+        public PassengerDto Create(PassengerCreateRequest request)
         {
-            Passenger newPassenger = new Passenger(request.Name, request.Email, request.Password, request.Dni, request.Location, request.Destination);
-            _passengerRepository.Add(newPassenger);
-            return PassengerDto.Create(newPassenger);
+            Passenger passenger = new Passenger(request.Name, request.Email, request.Password, request.Dni);
+
+            _passengerRepository.Add(passenger);
+            return PassengerDto.Create(passenger);
         }
 
-        public void DeletePassenger(int id)
+        public void Delete(int id)
         {
             var passenger = _passengerRepository.GetById(id);
             if (passenger == null)
@@ -41,19 +42,19 @@ namespace Application.Services
             _passengerRepository.Delete(passenger);
         }
 
-        public List<PassengerDto> GetAllPassenger()
+        public List<PassengerDto> GetAll()
         {
             var passengers = _passengerRepository.GetAll();
             return passengers.Select(PassengerDto.Create).ToList();
         }
 
-        public PassengerDto? GetPassengerById(int id)
+        public PassengerDto? GetById(int id)
         {
             var passenger = _passengerRepository.GetById(id);
             return passenger != null ? PassengerDto.Create(passenger) : null;
         }
 
-        public void UpdatePassenger(int id, PassengerUpdateRequest request)
+        public void Update(int id, PassengerUpdateRequest request)
         {
             var passenger = _passengerRepository.GetById(id) ?? throw new NotFoundException($"Pasajero {id} no encontrado.");
 
@@ -61,8 +62,7 @@ namespace Application.Services
             passenger.Email = request.Email ?? passenger.Email;
             passenger.Password = request.Password ?? passenger.Password;
             passenger.Dni = request.Dni ?? passenger.Dni;
-            passenger.Location = request.Location ?? passenger.Location;
-            passenger.Destination = request.Destination ?? passenger.Destination;
+            passenger.Description = request.Description ?? passenger.Description;
 
             _passengerRepository.Update(passenger);
         }
