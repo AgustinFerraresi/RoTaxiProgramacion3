@@ -11,6 +11,8 @@ namespace Application.Models
     public class RideDto
     {
         public int Id { get; set; }
+        public string Location { get; set; }
+        public string Destination { get; set; }
         public DateTime Date { get; set; }
         public float Cost { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
@@ -19,6 +21,8 @@ namespace Application.Models
         {
             var dto = new RideDto();
             dto.Id = ride.Id;
+            dto.Location = ride.Location;
+            dto.Destination = ride.Destination;
             dto.Date = ride.Date;
             dto.Cost = ride.Cost;
             dto.PaymentMethod = ride.PaymentMethod;

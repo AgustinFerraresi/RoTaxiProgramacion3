@@ -14,7 +14,7 @@ namespace Application.Interfaces
     {
         DriverDto CreateDriver(DriverRequest request);
         void DeleteDriver(int id);
-        void UpdateDriver(int id, DriveUpdateRequest request);
+        void UpdateDriver(int id, DriverUpdateRequest request);
         List<DriverDto> GetAllDrivers();
         public DriverDto GetDriverById(int id);
     }

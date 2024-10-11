@@ -39,7 +39,7 @@ namespace Application.Services
             _driverRepository.Delete(driver);
         }
 
-        public void UpdateDriver(int id, DriveUpdateRequest request)
+        public void UpdateDriver(int id, DriverUpdateRequest request)
         {
             var driver = _driverRepository.GetById(id) ?? throw new NotFoundException($"Pasajero {id} no encontrado.");
 

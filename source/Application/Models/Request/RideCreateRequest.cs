@@ -10,6 +10,8 @@ namespace Application.Models.Request
     public class RideCreateRequest
     {
         public DateTime Date { get; set; }
+        public string Location { get; set; }
+        public string Destination { get; set; }
         public float Cost { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
     }

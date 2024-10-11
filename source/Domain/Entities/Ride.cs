@@ -11,9 +11,9 @@ namespace Domain.Classes
 {
     public class Ride
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
+        public string Location { get; set; }
+        public string Destination { get; set; }
         public DateTime Date { get; set; }
         public float Cost { get; set; }
         public PaymentMethod PaymentMethod { get; set; }

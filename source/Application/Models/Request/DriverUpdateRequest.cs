@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Models.Request
 {
-    public class DriveUpdateRequest
+    public class DriverUpdateRequest
     {
         public string? Name { get; set; }
         public string? Email { get; set; }

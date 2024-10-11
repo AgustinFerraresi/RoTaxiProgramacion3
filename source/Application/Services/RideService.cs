@@ -36,6 +36,8 @@ namespace Application.Services
         public RideDto Create(RideCreateRequest request)
         {
             Ride ride = new Ride();
+            ride.Location = request.Location;
+            ride.Destination = request.Destination;
             ride.Date = request.Date;
             ride.Cost = request.Cost;
             ride.PaymentMethod = request.PaymentMethod;
@@ -46,12 +48,25 @@ namespace Application.Services
 
         public void Delete(int id)
         {
-            var passenger = _rideRepository.GetById(id);
-            if (passenger == null)
+            var ride = _rideRepository.GetById(id);
+            if (ride == null)
             {
-                throw new NotFoundException("Passenger not found.");
+                throw new NotFoundException("Viaje not found.");
             }
-            _rideRepository.Delete(passenger);
+            _rideRepository.Delete(ride);
+        }
+
+        public void Update(int id, RideUpdateRequest request)
+        {
+            var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Viaje {id} no encontrado.");
+
+            ride.Location = request.Location ?? ride.Location;
+            ride.Destination = request.Destination ?? ride.Destination;
+            ride.Date = request.Date ?? ride.Date;
+            ride.Cost = request.Cost ?? ride.Cost;
+            ride.PaymentMethod = request.PaymentMethod ?? ride.PaymentMethod;
+
+            _rideRepository.Update(ride);
         }
     }
 }

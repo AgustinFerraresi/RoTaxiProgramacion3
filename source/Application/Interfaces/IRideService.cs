@@ -16,6 +16,7 @@ namespace Application.Interfaces
         RideDto? GetById(int id);
         RideDto Create(RideCreateRequest request);
         void Delete(int id);
-        
+        void Update(int id, RideUpdateRequest request);
+
     }
 }
