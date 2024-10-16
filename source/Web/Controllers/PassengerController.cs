@@ -2,6 +2,7 @@
 using Application.Models.Request;
 using Domain.Classes;
 using Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -12,6 +13,7 @@ namespace Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PassengerController : ControllerBase
     {
         private readonly IPassangerService _passangerService;
@@ -22,20 +24,23 @@ namespace Web.Controllers
         }
 
         [HttpPost("[action]")]
+        [AllowAnonymous]
         public IActionResult Create([FromBody] PassengerCreateRequest request)
         {
-            var result =  _passangerService.Create(request);
+            var result = _passangerService.Create(request);
             return Ok(result);
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult GetAll()
         {
             return Ok(_passangerService.GetAll());
         }
 
         [HttpGet("id/{id}")]
-        public IActionResult GetPassengerById(int id) 
+        [AllowAnonymous]
+        public IActionResult GetPassengerById(int id)
         {
             try
             {
