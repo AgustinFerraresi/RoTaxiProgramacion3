@@ -24,7 +24,7 @@ namespace Application.Services
         //aca recibo el Dto de la request y armo el Dto de la response
         public VehicleDto CreateVehicle(CreateVehicleRequest request)
         {
-            Vehicle newVehicle = new Vehicle(request.brand, request.year, request.model);
+            Vehicle newVehicle = new Vehicle(request.brand, request.year, request.model, request.patente);
             _vehicleRepository.Add(newVehicle);
             return VehicleDto.Create(newVehicle);//aca creo un dto de respuesta del vehiculo a partir del newVehicle y lo retorno
         }
@@ -60,6 +60,7 @@ namespace Application.Services
             vehicleToUpdate.Brand = request.brand ?? vehicleToUpdate.Brand;
             vehicleToUpdate.Model = request.model ?? vehicleToUpdate.Model;
             vehicleToUpdate.Year = request.year.HasValue ? request.year.Value : vehicleToUpdate.Year;
+            vehicleToUpdate.Patente = request.patente ?? vehicleToUpdate.Patente;
 
             _vehicleRepository.Update(vehicleToUpdate);
             return VehicleDto.Create(vehicleToUpdate);

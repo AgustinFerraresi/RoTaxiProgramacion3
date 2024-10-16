@@ -14,6 +14,7 @@ namespace Application.Models
         public int Id { get; set; }
         public int Dni { get; set; }
 
+
         public static DriverDto Create(Driver driver)
         {
             var dto = new DriverDto();

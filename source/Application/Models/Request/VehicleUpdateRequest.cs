@@ -12,5 +12,6 @@ namespace Application.Models.Request
         public string? brand { get; set; }
         public int? year { get; set; }
         public string? model { get; set; }
+        public string? patente { get; set; }
     }
 }
