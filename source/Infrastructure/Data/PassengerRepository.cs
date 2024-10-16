@@ -21,5 +21,10 @@ namespace Infrastructure.Data
         {
             return _context.Passengers.FirstOrDefault(passenger => passenger.Id == id);
         }
+
+        public Passenger? GetByEmail(string email)
+        {
+            return _context.Passengers.SingleOrDefault(u => u.Email == email);
+        }
     }
 }
