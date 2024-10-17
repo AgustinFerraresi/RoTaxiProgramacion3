@@ -8,10 +8,10 @@ namespace Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AuthenticateController : ControllerBase
+    public class AuthenticationController : ControllerBase
     {
         private readonly IAuthenticateService _authenticateService;
-        public AuthenticateController(IAuthenticateService authenticateService)
+        public AuthenticationController(IAuthenticateService authenticateService)
         {
             _authenticateService = authenticateService;
         }

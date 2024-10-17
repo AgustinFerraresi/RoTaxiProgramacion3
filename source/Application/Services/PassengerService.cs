@@ -32,13 +32,10 @@ namespace Application.Services
             return PassengerDto.Create(passenger);
         }
 
-        public void Delete(int id)
+        public void Delete(int id, int userId)
         {
-            var passenger = _passengerRepository.GetById(id);
-            if (passenger == null)
-            {
-                throw new NotFoundException("Passenger not found.");
-            }
+            var passenger = _passengerRepository.GetById(id) ?? throw new NotFoundException($"Pasajero {id} no encontrado."); ;
+            if (passenger.Id != userId) throw new NotAllowedException("Acceso denegado.");
             _passengerRepository.Delete(passenger);
         }
 
@@ -54,9 +51,10 @@ namespace Application.Services
             return passenger != null ? PassengerDto.Create(passenger) : null;
         }
 
-        public void Update(int id, PassengerUpdateRequest request)
+        public void Update(int id, PassengerUpdateRequest request, int userId)
         {
             var passenger = _passengerRepository.GetById(id) ?? throw new NotFoundException($"Pasajero {id} no encontrado.");
+            if (passenger.Id != userId) throw new NotAllowedException("Acceso denegado.");
 
             passenger.Name = request.Name ?? passenger.Name;
             passenger.Email = request.Email ?? passenger.Email;
