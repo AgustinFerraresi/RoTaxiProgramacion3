@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Models;
 using Application.Models.Request;
 using Application.Services;
 using Domain.Classes;
@@ -59,7 +60,6 @@ namespace Web.Controllers
         }
 
         [HttpPut("{id}")]
-
         public IActionResult Update([FromRoute]  int id, [FromBody] DriverUpdateRequest request) 
         {
             try
@@ -72,5 +72,12 @@ namespace Web.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet("[action]")]
+        public List<VehicleDto> GetVehicles() //aca creo que el driver deberia venir por el token 
+        {
+            return driver.Vehicles.Select(VehicleDto.Create).ToList();
+        }
+
     }  
 }

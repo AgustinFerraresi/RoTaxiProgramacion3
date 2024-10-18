@@ -2,14 +2,16 @@
 using Application.Models;
 using Application.Models.Request;
 using Domain.Classes;
+using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Web.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]")]//para poder acceder a los endPoints de este controller el token recibido debe tener rango de driver
     [ApiController]
     public class VehicleController : ControllerBase
     {
@@ -22,8 +24,7 @@ namespace Web.Controllers
 
         //en los parametros van los dto
         //la responsabilidad de los controllers tiene que ser netamente de interfaz osea, es como un pasa mano,
-        //no tiene que crear nada ningun objeto ni nada por el estilo, crear un objeto es algo que le corresponde a un 
-        //servicio
+        //no tiene que crear nada ningun objeto ni nada por el estilo, crear un objeto es algo que le corresponde a un servicio
         [HttpPost("[action]")]
         public IActionResult CreateVehicle([FromBody] CreateVehicleRequest request)
         {
@@ -62,6 +63,18 @@ namespace Web.Controllers
         {
             var result = _vehicleService.UpdateVehicle(request, id);
             return Ok(result);
+        }
+
+        [HttpGet("[action]")]
+        public IActionResult GetDrivers(int vehicleId)
+        {
+            Vehicle vehicle = _vehicleService.GetVehicleById(vehicleId);
+            if (vehicle == null)
+            {
+                return BadRequest("No se encontró el vehículo");
+            }
+
+            return Ok(vehicle.Drivers.Select(DriverDto.Create).ToList());
         }
     }
 }

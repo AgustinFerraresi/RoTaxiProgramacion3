@@ -11,7 +11,7 @@ namespace Domain.Interfaces
     {
         //si driver tuviese metodos exclusivos respecto a las demas clases sus firmas irian aca
 
-        public Driver GetById(int id);
-
+        Driver GetById(int id);
+        Driver GetFullObjById(int id);
     }
 }

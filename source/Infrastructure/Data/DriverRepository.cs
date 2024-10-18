@@ -17,12 +17,16 @@ namespace Infrastructure.Data
             _context = context;
         }
 
-
-        public Driver? GetById(int id)
+        public Driver GetById(int id)
         {
             return _context.Drivers.FirstOrDefault(driver => driver.Id == id);
         }
-        
+
+        public Driver GetFullObjById(int id)
+        {
+            return _context.Drivers.FirstOrDefault(driver => driver.Id == id);
+        }
+
 
     }
 }

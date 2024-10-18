@@ -2,6 +2,7 @@
 using Application.Models;
 using Application.Models.Request;
 using Domain.Classes;
+using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
 using System;
@@ -15,10 +16,12 @@ namespace Application.Services
     public class DriverService : IDriverService 
     {
         private readonly IDriverRepository _driverRepository;
+        private readonly IVehicleRepository _vehicleRepository;
 
-        public DriverService(IDriverRepository driverRepository)
+        public DriverService(IDriverRepository driverRepository,IVehicleRepository vehicleRepository)
         {
             _driverRepository = driverRepository;
+            _vehicleRepository = vehicleRepository;
         }
 
         public DriverDto CreateDriver(DriverCreateRequest request)
@@ -28,13 +31,14 @@ namespace Application.Services
             return DriverDto.Create(newDriver);
         }
 
-        //en cada uno de los metodos se puede usar logica adicional para hacer verificaciones y demas cosas si fuese necesario
+        //en cada uno de los metodos se puede usar logica adicional para hacer verificaciones y
+        //demas cosas si fuese necesario
         public void DeleteDriver(int id)
         {
             var driver = _driverRepository.GetById(id);
             if (driver == null)
             {
-                throw new NotFoundException("Passenger not found.");
+                throw new NotFoundException("Pasajero no encontrado");
             }
             _driverRepository.Delete(driver);
         }
@@ -61,6 +65,24 @@ namespace Application.Services
         {
             var driver = _driverRepository.GetById(id);
             return driver != null ? DriverDto.Create(driver) : null;
+        }
+
+        public void AddVehicle(int driverId, int vehicleId)
+        {
+            var driver = _driverRepository.GetFullObjById(driverId);
+            var vehicle = _vehicleRepository.GetFullObjById(vehicleId);
+            
+
+            if (driver != null && vehicle != null) 
+            {
+                driver.AddVehicle(vehicle);
+            }
+
+            //Driver driver = _vehicleRepository.GetById(driverId);
+            //Vehicle vehicle = _vehicleRepository.GetById(vehicleId);
+            //driver.Vehicles.Add(vehicle);
+            //driver.Vehicles.
+            //driver.AddVehicle(vehicle);
         }
 
     }

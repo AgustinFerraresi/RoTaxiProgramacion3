@@ -3,6 +3,7 @@ using Application.Models;
 using Application.Models.Request;
 using Domain.Classes;
 using Domain.Interfaces;
+using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +15,11 @@ namespace Application.Services
     public class VehicleService : IVehicleService
     {
         private readonly IVehicleRepository _vehicleRepository;
-
-        public VehicleService(IVehicleRepository vehicleRepository)
+        private readonly IDriverRepository _driverRepository;
+        public VehicleService(IVehicleRepository vehicleRepository,IDriverRepository driverRepository)
         {
             _vehicleRepository = vehicleRepository;
+            _driverRepository = driverRepository;
         }
 
         //el encargado de crear los objetos es el service
@@ -63,6 +65,19 @@ namespace Application.Services
 
             _vehicleRepository.Update(vehicleToUpdate);
             return VehicleDto.Create(vehicleToUpdate);
+        }
+
+        public void AddDriver(int vehicleId, int driverId)
+        {
+            Driver driver = _driverRepository.GetById(driverId);
+            Vehicle vehicle = _vehicleRepository.GetById(vehicleId);
+
+            if (driver != null && vehicle != null)
+            {
+                vehicle.AddDriver(driver);
+                return;
+            }
+            return;
         }
     }
 }
