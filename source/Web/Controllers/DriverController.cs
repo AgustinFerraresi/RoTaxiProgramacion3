@@ -19,6 +19,7 @@ namespace Web.Controllers
             _driverService = driverService;
         }
 
+
         [HttpPost("[action]")]
         public IActionResult Create([FromBody] DriverCreateRequest request)
         {
@@ -26,11 +27,13 @@ namespace Web.Controllers
             return Ok(result);
         }
 
+
         [HttpGet]
         public IActionResult GetAll()
         {
             return Ok(_driverService.GetAllDrivers());
         }
+
 
         [HttpGet("id/{id}")]
         public IActionResult GetDriverById(int id)
@@ -44,6 +47,7 @@ namespace Web.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
 
         [HttpDelete("{id}")]
         public IActionResult DeleteDriver([FromRoute] int id)
@@ -59,6 +63,7 @@ namespace Web.Controllers
             }
         }
 
+
         [HttpPut("{id}")]
         public IActionResult Update([FromRoute]  int id, [FromBody] DriverUpdateRequest request) 
         {
@@ -73,16 +78,22 @@ namespace Web.Controllers
             }
         }
 
+
         [HttpGet("[action]/{driverId}")]
         public IActionResult GetDriverVehicles(int driverId)
         {
             var result = _driverService.GetAllDriverVehicles(driverId);
             if (result == null)
             {
-                return NotFound("No se encontraron vehiculos para este conductor.");
+                return NotFound("Error al buscar el conductor.");
+            }
+            if (result.Count == 0)
+            {
+                return BadRequest("El conductor no tiene vehiculos");
             }
             return Ok(result);
         }
+
 
         [HttpPost("[action]/{driverId}/{vehicleId}")]
         public IActionResult AddVehicle(int driverId, int vehicleId)
@@ -90,6 +101,7 @@ namespace Web.Controllers
             var result = _driverService.AddVehicle(driverId, vehicleId);
             return result ? Ok("Vehiculo agregado correctamente") : BadRequest("Error al agregar el vehiculo");
         }
+
 
         [HttpPost("[action]/{driverId}/{vehicleId}")]
         public IActionResult DeleteDriverVehicle(int driverId,int vehicleId)

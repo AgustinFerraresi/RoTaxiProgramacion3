@@ -30,6 +30,7 @@ namespace Application.Services
             return DriverDto.Create(newDriver);
         }
 
+
         public void DeleteDriver(int id)
         {
             var driver = _driverRepository.GetById(id);
@@ -39,6 +40,7 @@ namespace Application.Services
             }
             _driverRepository.Delete(driver);
         }
+
 
         public void UpdateDriver(int id, DriverUpdateRequest request)
         {
@@ -52,11 +54,14 @@ namespace Application.Services
 
             _driverRepository.Update(driver);
         }
+
+
         public List<DriverDto> GetAllDrivers()
         {
             var driver = _driverRepository.GetAll();
             return driver.Select(DriverDto.Create).ToList();
         }
+
 
         public DriverDto? GetDriverById(int id)
         {
@@ -64,26 +69,27 @@ namespace Application.Services
             return driver != null ? DriverDto.Create(driver) : null;
         }
 
+
         public bool AddVehicle(int driverId, int vehicleId)
         {
             Driver driver = _driverRepository.GetFullDriverById(driverId);
             Vehicle vehicle = _vehicleRepository.GetFullVehicleById(vehicleId);
 
-            if (driver != null && vehicle != null)
+            if (driver != null && vehicle != null && !(driver._vehicles.Contains(vehicle)))
             {
-                _driverRepository.AddVehicle(driver, vehicle);
+                _driverRepository.AddVehicle(driver, vehicle); //agrego un vehiculo a un conductor
                 return true;
             }
             return false;
         }
 
 
-        public List<VehicleDto> GetAllDriverVehicles(int driverId)
+        public List<VehicleDto>? GetAllDriverVehicles(int driverId)
         {
             Driver driver = _driverRepository.GetFullDriverById(driverId);
             if (driver == null)
             {
-                return new List<VehicleDto>();
+                return null;
             }
 
             List<Vehicle> driverVehicles = _driverRepository.GetDriverVehicles(driver);
@@ -94,15 +100,16 @@ namespace Application.Services
             return driverVehiclesMapped;
         }
 
-        //metodo para eliminar uno de los vehiculos del driver
+
         public bool DeleteDriverVehicle(int driverId, int vehicleId)
         {
             Driver driver = _driverRepository.GetFullDriverById(driverId);
             Vehicle vehicle = _vehicleRepository.GetFullVehicleById(vehicleId);
 
-            if (driver != null && vehicle != null)
+            if (driver != null && vehicle != null && driver._vehicles.Contains(vehicle))
             {
-                _driverRepository.DeleteVehicle(driver,vehicle);
+                _driverRepository.DeleteVehicle(driver,vehicle);//elimino un vehiculo de un conductor
+                //_vehicleRepository.DeleteDriverFromVehicle(vehicle, driver);//elimino un conductor de un vehiculo
                 return true;
             }
             return false;

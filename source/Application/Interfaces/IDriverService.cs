@@ -18,7 +18,7 @@ namespace Application.Interfaces
         List<DriverDto> GetAllDrivers();
         DriverDto? GetDriverById(int id);
         bool AddVehicle(int driverId, int vehicleId);
-        List<VehicleDto> GetAllDriverVehicles(int driverId);
+        List<VehicleDto>? GetAllDriverVehicles(int driverId);
         bool DeleteDriverVehicle(int driverId, int vehicleId);
     }
 }
