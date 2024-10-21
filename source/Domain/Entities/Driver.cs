@@ -16,13 +16,5 @@ namespace Domain.Classes
             Available = false;
             _vehicles = new List<Vehicle>();
         }
-        //public void AddVehicle(Vehicle vehicle)
-        //{    
-        //    if (!_vehicles.Contains(vehicle))
-        //    {
-        //        _vehicles.Add(vehicle);
-        //    }
-        //}
-        //public IReadOnlyList<Vehicle> Vehicles => _vehicles;
     }
 }

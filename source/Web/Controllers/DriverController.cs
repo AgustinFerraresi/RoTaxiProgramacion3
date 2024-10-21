@@ -65,7 +65,7 @@ namespace Web.Controllers
 
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute]  int id, [FromBody] DriverUpdateRequest request) 
+        public IActionResult Update([FromRoute] int id, [FromBody] DriverUpdateRequest request)
         {
             try
             {
@@ -104,7 +104,7 @@ namespace Web.Controllers
 
 
         [HttpPost("[action]/{driverId}/{vehicleId}")]
-        public IActionResult DeleteDriverVehicle(int driverId,int vehicleId)
+        public IActionResult DeleteDriverVehicle(int driverId, int vehicleId)
         {
             var result = _driverService.DeleteDriverVehicle(driverId, vehicleId);
             return result ? Ok("Vehiculo eliminado correctamente") : BadRequest("Error al eliminar el vehiculo");
