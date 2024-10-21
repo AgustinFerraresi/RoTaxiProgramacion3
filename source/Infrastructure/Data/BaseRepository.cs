@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Data
 {
-    public abstract class BaseRepository<T> : IBaseRepository<T>, where T : class
+    public abstract class BaseRepository<T> : IBaseRepository<T> where T : class
     {
         //aca  van los metodos con la logica dentro estos metodos seran usando por los repos que hereden baseRepository
         //el repoBase Tiene que tener inyectado el contexto
@@ -48,7 +48,5 @@ namespace Infrastructure.Data
             _dbContext.Set<T>().Update(entity);
             _dbContext.SaveChanges();
         }
-
-
     }
 }

@@ -2,7 +2,6 @@
 using Application.Models;
 using Application.Models.Request;
 using Domain.Classes;
-using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
 using System;
@@ -13,12 +12,12 @@ using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class DriverService : IDriverService 
+    public class DriverService : IDriverService
     {
         private readonly IDriverRepository _driverRepository;
         private readonly IVehicleRepository _vehicleRepository;
 
-        public DriverService(IDriverRepository driverRepository,IVehicleRepository vehicleRepository)
+        public DriverService(IDriverRepository driverRepository, IVehicleRepository vehicleRepository)
         {
             _driverRepository = driverRepository;
             _vehicleRepository = vehicleRepository;
@@ -31,14 +30,12 @@ namespace Application.Services
             return DriverDto.Create(newDriver);
         }
 
-        //en cada uno de los metodos se puede usar logica adicional para hacer verificaciones y
-        //demas cosas si fuese necesario
         public void DeleteDriver(int id)
         {
             var driver = _driverRepository.GetById(id);
             if (driver == null)
             {
-                throw new NotFoundException("Pasajero no encontrado");
+                throw new NotFoundException("Conductor no encontrado.");
             }
             _driverRepository.Delete(driver);
         }
@@ -51,7 +48,7 @@ namespace Application.Services
             driver.Email = request.Email ?? driver.Email;
             driver.Password = request.Password ?? driver.Password;
             driver.Dni = request.Dni ?? driver.Dni;
-  
+
 
             _driverRepository.Update(driver);
         }
@@ -67,23 +64,48 @@ namespace Application.Services
             return driver != null ? DriverDto.Create(driver) : null;
         }
 
-        public void AddVehicle(int driverId, int vehicleId)
+        public bool AddVehicle(int driverId, int vehicleId)
         {
-            var driver = _driverRepository.GetFullObjById(driverId);
-            var vehicle = _vehicleRepository.GetFullObjById(vehicleId);
-            
+            Driver driver = _driverRepository.GetFullDriverById(driverId);
+            Vehicle vehicle = _vehicleRepository.GetFullVehicleById(vehicleId);
 
-            if (driver != null && vehicle != null) 
+            if (driver != null && vehicle != null)
             {
-                driver.AddVehicle(vehicle);
+                _driverRepository.AddVehicle(driver, vehicle);
+                return true;
             }
-
-            //Driver driver = _vehicleRepository.GetById(driverId);
-            //Vehicle vehicle = _vehicleRepository.GetById(vehicleId);
-            //driver.Vehicles.Add(vehicle);
-            //driver.Vehicles.
-            //driver.AddVehicle(vehicle);
+            return false;
         }
 
+
+        public List<VehicleDto> GetAllDriverVehicles(int driverId)
+        {
+            Driver driver = _driverRepository.GetFullDriverById(driverId);
+            if (driver == null)
+            {
+                return new List<VehicleDto>();
+            }
+
+            List<Vehicle> driverVehicles = _driverRepository.GetDriverVehicles(driver);
+            List<VehicleDto> driverVehiclesMapped = driverVehicles
+                .Select(vehicle => VehicleDto.Create(vehicle))
+                .ToList();
+
+            return driverVehiclesMapped;
+        }
+
+        //metodo para eliminar uno de los vehiculos del driver
+        public bool DeleteDriverVehicle(int driverId, int vehicleId)
+        {
+            Driver driver = _driverRepository.GetFullDriverById(driverId);
+            Vehicle vehicle = _vehicleRepository.GetFullVehicleById(vehicleId);
+
+            if (driver != null && vehicle != null)
+            {
+                _driverRepository.DeleteVehicle(driver,vehicle);
+                return true;
+            }
+            return false;
+        }
     }
 }

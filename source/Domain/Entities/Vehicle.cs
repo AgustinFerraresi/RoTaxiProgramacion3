@@ -4,9 +4,10 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Domain.Classes
 {
     public class Vehicle
     {
@@ -15,7 +16,8 @@ namespace Domain.Entities
         public string Brand { get; set; }
         public int Year { get; set; }
         public string Model { get; set; }
-        public List<Driver> _drivers { get; set; }
+        //[JsonIgnore]
+        public List<Driver> Drivers { get; set; }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -25,18 +27,18 @@ namespace Domain.Entities
             Brand = brand;
             Year = year;
             Model = model;
-            _drivers = new List<Driver>();
         }
 
         public void AddDriver(Driver driver)
         {
-            if (_drivers.Contains(driver))
+            if (Drivers.Contains(driver))
             {
                 return;
             }
-            _drivers.Add(driver);
+            Drivers.Add(driver);
             return;
         }
 
-        public IReadOnlyList Drivers => _drivers;
+        //public IReadOnlyList<Driver> Drivers => _drivers;
     }
+}

@@ -17,5 +17,6 @@ namespace Application.Interfaces
         List<VehicleDto> GetAllVehicles();
         VehicleDto GetVehicleById(int id);
         VehicleDto UpdateVehicle(VehicleUpdateRequest request, int id);
+        //Vehicle GetFullVehicleById(int id);
     }
 }

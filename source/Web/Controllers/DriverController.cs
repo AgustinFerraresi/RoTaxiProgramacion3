@@ -73,11 +73,29 @@ namespace Web.Controllers
             }
         }
 
-        [HttpGet("[action]")]
-        public List<VehicleDto> GetVehicles() //aca creo que el driver deberia venir por el token 
+        [HttpGet("[action]/{driverId}")]
+        public IActionResult GetDriverVehicles(int driverId)
         {
-            return driver.Vehicles.Select(VehicleDto.Create).ToList();
+            var result = _driverService.GetAllDriverVehicles(driverId);
+            if (result == null)
+            {
+                return NotFound("No se encontraron vehiculos para este conductor.");
+            }
+            return Ok(result);
         }
 
+        [HttpPost("[action]/{driverId}/{vehicleId}")]
+        public IActionResult AddVehicle(int driverId, int vehicleId)
+        {
+            var result = _driverService.AddVehicle(driverId, vehicleId);
+            return result ? Ok("Vehiculo agregado correctamente") : BadRequest("Error al agregar el vehiculo");
+        }
+
+        [HttpPost("[action]/{driverId}/{vehicleId}")]
+        public IActionResult DeleteDriverVehicle(int driverId,int vehicleId)
+        {
+            var result = _driverService.DeleteDriverVehicle(driverId, vehicleId);
+            return result ? Ok("Vehiculo eliminado correctamente") : BadRequest("Error al eliminar el vehiculo");
+        }
     }  
 }

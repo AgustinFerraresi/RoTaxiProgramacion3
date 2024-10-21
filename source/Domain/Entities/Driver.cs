@@ -1,10 +1,11 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Entities
+namespace Domain.Classes
 {
     public class Driver : User
     {
@@ -15,14 +16,13 @@ namespace Domain.Entities
             Available = false;
             _vehicles = new List<Vehicle>();
         }
-        public void AddVehicle(Vehicle vehicle)
-        {
-            if (!(_vehicles.Contains(vehicle)))
-            {
-                _vehicles.Add(vehicle);
-            }            
-        }   
-
-        public IReadOnlyList Vehicles => _vehicles;
+        //public void AddVehicle(Vehicle vehicle)
+        //{    
+        //    if (!_vehicles.Contains(vehicle))
+        //    {
+        //        _vehicles.Add(vehicle);
+        //    }
+        //}
+        //public IReadOnlyList<Vehicle> Vehicles => _vehicles;
     }
 }

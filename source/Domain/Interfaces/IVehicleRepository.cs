@@ -10,5 +10,6 @@ namespace Domain.Interfaces
     public interface IVehicleRepository : IBaseRepository<Vehicle>
     {
         //Vehicle GetVehicleById(int id);
+        Vehicle GetFullVehicleById(int id);
     }
 }
