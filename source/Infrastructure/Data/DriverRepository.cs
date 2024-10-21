@@ -22,7 +22,10 @@ namespace Infrastructure.Data
         {
             return _context.Drivers.FirstOrDefault(driver => driver.Id == id);
         }
-        
 
+        public Driver? GetByEmail(string email)
+        {
+            return _context.Drivers.SingleOrDefault(u => u.Email == email);
+        }
     }
 }

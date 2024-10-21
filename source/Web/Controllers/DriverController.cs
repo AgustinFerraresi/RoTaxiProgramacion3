@@ -3,12 +3,14 @@ using Application.Models.Request;
 using Application.Services;
 using Domain.Classes;
 using Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DriverController : ControllerBase
     {
         private readonly IDriverService _driverService;
@@ -19,6 +21,7 @@ namespace Web.Controllers
         }
 
         [HttpPost("[action]")]
+        [AllowAnonymous]
         public IActionResult Create([FromBody] DriverCreateRequest request)
         {
             var result = _driverService.CreateDriver(request);
@@ -26,6 +29,7 @@ namespace Web.Controllers
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult GetAll()
         {
             return Ok(_driverService.GetAllDrivers());

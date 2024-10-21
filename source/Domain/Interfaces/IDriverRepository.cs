@@ -13,5 +13,7 @@ namespace Domain.Interfaces
 
         public Driver GetById(int id);
 
+        public Driver? GetByEmail(string email);
+
     }
 }

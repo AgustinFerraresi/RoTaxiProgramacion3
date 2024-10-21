@@ -18,20 +18,22 @@ namespace Infrastructure.Services
     public class AuthenticationService : IAuthenticateService
     {
         private readonly IPassengerRepository _passengerRepository;
+        private readonly IDriverRepository _driverRepository;
         private readonly AutenticacionServiceOptions _options;
 
-        public AuthenticationService(IPassengerRepository passengerRepository, IOptions<AutenticacionServiceOptions> options)
+        public AuthenticationService(IPassengerRepository passengerRepository, IDriverRepository driverRepository,  IOptions<AutenticacionServiceOptions> options)
         {
             _passengerRepository = passengerRepository;
-            _options = options.Value;
+            _driverRepository = driverRepository;
+            _options = options.Value;            
         }
 
         public string Autenticar(AuthenticationRequest authenticationRequest)
         {
 
-            var user = ValidateUser(authenticationRequest);
-
-            if (user == null)
+            var passenger = ValidatePassenger(authenticationRequest);
+            var driver = ValidateDriver(authenticationRequest);
+            if (passenger == null && driver == null)
             {
                 throw new NotAllowedException("User authentication failed");
             }
@@ -44,8 +46,21 @@ namespace Infrastructure.Services
 
 
             var claimsForToken = new List<Claim>();
-            claimsForToken.Add(new Claim("sub", user.Id.ToString()));
-            claimsForToken.Add(new Claim("Name", user.Name));
+
+            if (passenger != null)
+            {
+                claimsForToken.Add(new Claim("sub", passenger.Id.ToString()));
+                claimsForToken.Add(new Claim("Name", passenger.Name));
+                claimsForToken.Add(new Claim("Role", "Passenger"));
+            }
+
+            else if (driver != null)
+            {
+                claimsForToken.Add(new Claim("sub", driver.Id.ToString()));
+                claimsForToken.Add(new Claim("Name", driver.Name));
+                claimsForToken.Add(new Claim("Role", "Driver"));
+            }
+           
 
             var jwtSecurityToken = new JwtSecurityToken(
               _options.Issuer,
@@ -61,12 +76,29 @@ namespace Infrastructure.Services
             return tokenToReturn.ToString();
         }
 
-        private Passenger? ValidateUser(AuthenticationRequest authenticationRequest)
+        private Passenger? ValidatePassenger(AuthenticationRequest authenticationRequest)
         {
             if (string.IsNullOrEmpty(authenticationRequest.Email) || string.IsNullOrEmpty(authenticationRequest.Password))
                 return null;
 
             var user = _passengerRepository.GetByEmail(authenticationRequest.Email);
+
+            if (user == null) return null;
+
+
+            if (user.Password == authenticationRequest.Password) return user;
+
+
+            return null;
+
+        }
+
+        private Driver? ValidateDriver(AuthenticationRequest authenticationRequest)
+        {
+            if (string.IsNullOrEmpty(authenticationRequest.Email) || string.IsNullOrEmpty(authenticationRequest.Password))
+                return null;
+
+            var user = _driverRepository.GetByEmail(authenticationRequest.Email);
 
             if (user == null) return null;
 

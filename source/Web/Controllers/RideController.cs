@@ -4,6 +4,7 @@ using Application.Models.Request;
 using Application.Services;
 using Domain.Classes;
 using Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,15 +12,19 @@ namespace Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class RideController : ControllerBase
     {
         private readonly IRideService _rideService;
-        public RideController(IRideService rideService)
+        private readonly IPassangerService _passangerService;
+        public RideController(IRideService rideService, IPassangerService passangerService)
         {
             _rideService = rideService;
+            _passangerService = passangerService;
         }
 
         [HttpPost("[action]")]
+        
         public IActionResult Create([FromBody] RideCreateRequest request)
         {
             var result = _rideService.Create(request);
