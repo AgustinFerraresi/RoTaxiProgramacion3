@@ -11,5 +11,6 @@ namespace Domain.Interfaces
     {
         //Vehicle GetVehicleById(int id);
         Vehicle GetFullVehicleById(int id);
+        List<Driver> GetDrivers(Vehicle vehicle);
     }
 }

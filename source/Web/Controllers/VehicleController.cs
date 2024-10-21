@@ -21,10 +21,6 @@ namespace Web.Controllers
             _vehicleService = vehicleService;
         }
 
-        //en los parametros van los dto
-        //la responsabilidad de los controllers tiene que ser netamente de interfaz osea, es como un pasa mano,
-        //no tiene que crear nada ningun objeto ni nada por el estilo, crear un objeto es algo que le corresponde a un 
-        //servicio
         [HttpPost("[action]")]
         public IActionResult CreateVehicle([FromBody] CreateVehicleRequest request)
         {
@@ -65,12 +61,22 @@ namespace Web.Controllers
             return Ok(result);
         }
 
-        //[HttpGet("[action]")]
-        //public IActionResult GetDrivers(int vehicleId)
-        //{
-        //    Vehicle vehicle = _vehicleService.GetFullVehicleById(vehicleId);
-        //    var drivers = vehicle.Drivers;
-        //    return Ok(drivers);
-        //}
+        [HttpGet("[action]{vehicleId}")]
+        public IActionResult GetDriversVehicle(int vehicleId)
+        {
+            List<DriverDto>? driversList = _vehicleService.GetAllDrivers(vehicleId);
+
+            if (driversList == null)
+            {
+                return BadRequest("Vehiculo no encontrado");
+            }
+
+            if (driversList.Count == 0)
+            {
+                return Ok("El vehiculo no tiene conductores");
+            }
+
+            return Ok(driversList);
+        }
     }
 }
