@@ -26,7 +26,7 @@ namespace Web.Controllers
 
         [HttpPost("[action]")]
         
-        public IActionResult Create([FromBody] RideCreateRequest request)
+        public IActionResult CreateRide([FromBody] RideCreateRequest request)
         {
             var userRole = User.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
             if (userRole != "Passenger")
@@ -35,7 +35,7 @@ namespace Web.Controllers
             }
 
             int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
-            var result = _rideService.Create(request, userId);
+            var result = _rideService.CreateRide(request, userId);
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 

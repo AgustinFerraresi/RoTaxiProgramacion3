@@ -1,5 +1,6 @@
 ﻿using Domain.Classes;
 using Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,13 @@ namespace Infrastructure.Data
         public RideRepository(ApplicationContext context) : base(context)
         {
             _context = context;
+        }
+
+        public override List<Ride> GetAll()
+        {
+            return _context.Rides
+                    .Include(m => m.Passenger)
+                    .ToList();
         }
 
     }

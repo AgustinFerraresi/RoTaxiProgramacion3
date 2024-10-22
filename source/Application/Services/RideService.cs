@@ -35,11 +35,12 @@ namespace Application.Services
             return ride != null ? RideDto.Create(ride) : null;
         }
 
-        public RideDto Create(RideCreateRequest request, int userId)
+        public RideDto CreateRide(RideCreateRequest request, int userId)
         {
             var authenticatedPassenger = _passengerRepository.GetById(userId);
 
             Ride ride = new Ride();
+            ride.Passenger = authenticatedPassenger;
             ride.Location = request.Location;
             ride.Destination = request.Destination;
             ride.Date = request.Date;
