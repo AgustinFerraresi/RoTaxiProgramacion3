@@ -31,8 +31,8 @@ namespace Application.Services
 
         public RideDto? GetById(int id)
         {
-            var ride = _rideRepository.GetById(id);
-            return ride != null ? RideDto.Create(ride) : null;
+            var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Ride {id} not found");
+            return RideDto.Create(ride);
         }
 
         public RideDto CreateRide(RideCreateRequest request, int userId)
@@ -51,13 +51,12 @@ namespace Application.Services
             return RideDto.Create(ride);
         }
 
-        public void Delete(int id)
+        public void Delete(int id, int userId)
         {
-            var ride = _rideRepository.GetById(id);
-            if (ride == null)
-            {
-                throw new NotFoundException("Viaje not found.");
-            }
+            Passenger authenticatedPassenger = _passengerRepository.GetById(userId);
+
+            var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Ride {id} not found");
+            if (ride.Passenger.Id != authenticatedPassenger.Id) throw new NotAllowedException("Acceso denegado.");
             _rideRepository.Delete(ride);
         }
 

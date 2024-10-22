@@ -25,5 +25,16 @@ namespace Infrastructure.Data
                     .ToList();
         }
 
+        public override Ride? GetById<TId>(TId id)
+        {
+            if (id is int intId)
+            {
+                return _context.Rides
+                               .Include(m => m.Passenger)
+                               .FirstOrDefault(m => m.Id == intId);
+            }
+            throw new ArgumentException("Tipo de ID no compatible.");
+        }
+
     }
 }

@@ -38,7 +38,7 @@ namespace Infrastructure.Data
             return _dbContext.Set<T>().ToList();
         }
 
-        public T? GetById<TId>(TId id)
+        public virtual T? GetById<TId>(TId id)
         {
             return _dbContext.Set<T>().Find(new object[] { id });
         }

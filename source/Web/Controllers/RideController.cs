@@ -77,10 +77,11 @@ namespace Web.Controllers
         {
             try
             {
-                _rideService.Delete(id);
+                int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+                _rideService.Delete(id, userId);
                 return NoContent();
             }
-            catch (NotFoundException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
