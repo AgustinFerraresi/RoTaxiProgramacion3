@@ -13,7 +13,7 @@ namespace Domain.Interfaces
 
         public Driver GetById(int id);
 
-        public Driver? GetByEmail(string email);
+        public Driver? AutenticarDriver(string email, string password);
 
     }
 }

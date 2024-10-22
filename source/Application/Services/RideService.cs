@@ -46,6 +46,7 @@ namespace Application.Services
             ride.Date = request.Date;
             ride.Cost = request.Cost;
             ride.PaymentMethod = request.PaymentMethod;
+            ride.Message = request.Message;
 
             _rideRepository.Add(ride);
             return RideDto.Create(ride);
@@ -69,6 +70,7 @@ namespace Application.Services
             ride.Date = request.Date ?? ride.Date;
             ride.Cost = request.Cost ?? ride.Cost;
             ride.PaymentMethod = request.PaymentMethod ?? ride.PaymentMethod;
+            ride.Message = request.Message ?? ride.Message;
 
             _rideRepository.Update(ride);
         }

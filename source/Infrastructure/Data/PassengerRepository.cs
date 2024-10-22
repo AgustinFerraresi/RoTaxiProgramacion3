@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel;
 
 namespace Infrastructure.Data   
 {
@@ -22,9 +23,9 @@ namespace Infrastructure.Data
             return _context.Passengers.FirstOrDefault(passenger => passenger.Id == id);
         }
 
-        public Passenger? GetByEmail(string email)
+        public Passenger? AutenticatePassenger(string email, string password)
         {
-            return _context.Passengers.SingleOrDefault(u => u.Email == email);
+            return _context.Passengers.SingleOrDefault(u => u.Email == email && u.Password == password);
         }
     }
 }

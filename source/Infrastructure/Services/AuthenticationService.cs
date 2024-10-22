@@ -31,13 +31,12 @@ namespace Infrastructure.Services
         public string Autenticar(AuthenticationRequest authenticationRequest)
         {
 
-            var passenger = ValidatePassenger(authenticationRequest);
-            var driver = ValidateDriver(authenticationRequest);
-            if (passenger == null && driver == null)
+            var user = ValidatePassenger(authenticationRequest);
+           
+            if (user == null)
             {
                 throw new NotAllowedException("User authentication failed");
             }
-
 
 
             var securityPassword = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_options.SecretForKey));
@@ -47,17 +46,17 @@ namespace Infrastructure.Services
 
             var claimsForToken = new List<Claim>();
 
-            if (passenger != null)
+            if (authenticationRequest.UserType == "Passenger")
             {
-                claimsForToken.Add(new Claim("sub", passenger.Id.ToString()));
-                claimsForToken.Add(new Claim("Name", passenger.Name));
+                claimsForToken.Add(new Claim("sub", user.Id.ToString()));
+                claimsForToken.Add(new Claim("Name", user.Name));
                 claimsForToken.Add(new Claim("Role", "Passenger"));
             }
 
-            else if (driver != null)
+            else if (authenticationRequest.UserType == "Driver")
             {
-                claimsForToken.Add(new Claim("sub", driver.Id.ToString()));
-                claimsForToken.Add(new Claim("Name", driver.Name));
+                claimsForToken.Add(new Claim("sub", user.Id.ToString()));
+                claimsForToken.Add(new Claim("Name", user.Name));
                 claimsForToken.Add(new Claim("Role", "Driver"));
             }
            
@@ -76,40 +75,27 @@ namespace Infrastructure.Services
             return tokenToReturn.ToString();
         }
 
-        private Passenger? ValidatePassenger(AuthenticationRequest authenticationRequest)
+        private User? ValidatePassenger(AuthenticationRequest authenticationRequest)
         {
             if (string.IsNullOrEmpty(authenticationRequest.Email) || string.IsNullOrEmpty(authenticationRequest.Password))
                 return null;
 
-            var user = _passengerRepository.GetByEmail(authenticationRequest.Email);
+            if (authenticationRequest.UserType == "Passenger")
+            {
+                var user = _passengerRepository.AutenticatePassenger(authenticationRequest.Email, authenticationRequest.Password);
+                return user ?? null;
+            }
 
-            if (user == null) return null;
-
-
-            if (user.Password == authenticationRequest.Password) return user;
-
-
-            return null;
-
-        }
-
-        private Driver? ValidateDriver(AuthenticationRequest authenticationRequest)
-        {
-            if (string.IsNullOrEmpty(authenticationRequest.Email) || string.IsNullOrEmpty(authenticationRequest.Password))
-                return null;
-
-            var user = _driverRepository.GetByEmail(authenticationRequest.Email);
-
-            if (user == null) return null;
-
-
-            if (user.Password == authenticationRequest.Password) return user;
-
+            if (authenticationRequest.UserType == "Driver")
+            {
+                var user = _driverRepository.AutenticarDriver(authenticationRequest.Email, authenticationRequest.Password);
+                return user ?? null;
+            }
 
             return null;
-
         }
 
+       
         public class AutenticacionServiceOptions
         {
             public const string AutenticacionService = "AutenticacionService";

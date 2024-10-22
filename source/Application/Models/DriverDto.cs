@@ -11,7 +11,6 @@ namespace Application.Models
     {
         public string Name { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
         public int Id { get; set; }
         public int Dni { get; set; }
 
@@ -22,7 +21,6 @@ namespace Application.Models
 
             dto.Name = driver.Name;
             dto.Email = driver.Email;
-            dto.Password = driver.Password;
             dto.Id = driver.Id;
             dto.Dni = driver.Dni;
 

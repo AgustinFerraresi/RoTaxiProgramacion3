@@ -23,9 +23,9 @@ namespace Infrastructure.Data
             return _context.Drivers.FirstOrDefault(driver => driver.Id == id);
         }
 
-        public Driver? GetByEmail(string email)
+        public Driver? AutenticarDriver(string email, string password)
         {
-            return _context.Drivers.SingleOrDefault(u => u.Email == email);
+            return _context.Drivers.SingleOrDefault(u => u.Email == email && u.Password == password);
         }
     }
 }
