@@ -15,10 +15,12 @@ namespace Application.Services
     public class RideService : IRideService
     {
         private readonly IRideRepository _rideRepository;
+        private readonly IPassengerRepository _passengerRepository;
 
-        public RideService(IRideRepository rideRepository)
+        public RideService(IRideRepository rideRepository, IPassengerRepository passengerRepository)
         {
             _rideRepository = rideRepository;
+            _passengerRepository = passengerRepository;
         }
 
         public List<RideDto> GetAll()
@@ -33,8 +35,10 @@ namespace Application.Services
             return ride != null ? RideDto.Create(ride) : null;
         }
 
-        public RideDto Create(RideCreateRequest request)
+        public RideDto Create(RideCreateRequest request, int userId)
         {
+            var authenticatedPassenger = _passengerRepository.GetById(userId);
+
             Ride ride = new Ride();
             ride.Location = request.Location;
             ride.Destination = request.Destination;

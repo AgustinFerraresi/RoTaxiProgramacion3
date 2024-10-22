@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using System.Security.Claims;
+using Application.Interfaces;
 using Application.Models;
 using Application.Models.Request;
 using Application.Services;
@@ -27,8 +28,15 @@ namespace Web.Controllers
         
         public IActionResult Create([FromBody] RideCreateRequest request)
         {
-            var result = _rideService.Create(request);
-            return Ok(result);
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
+            if (userRole != "Passenger")
+            {
+                return Unauthorized();
+            }
+
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            var result = _rideService.Create(request, userId);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
         [HttpGet]

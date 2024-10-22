@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using System.Security.Claims;
+using Application.Interfaces;
 using Application.Models.Request;
 using Application.Services;
 using Domain.Classes;
@@ -53,10 +54,11 @@ namespace Web.Controllers
         {
             try
             {
-                _driverService.DeleteDriver(id);
+                int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+                _driverService.DeleteDriver(id, userId);
                 return NoContent();
             }
-            catch (NotFoundException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -64,11 +66,12 @@ namespace Web.Controllers
 
         [HttpPut("{id}")]
 
-        public IActionResult Update([FromRoute]  int id, [FromBody] DriverUpdateRequest request) 
+        public IActionResult UpdateDriver([FromRoute]  int id, [FromBody] DriverUpdateRequest request) 
         {
             try
             {
-                _driverService.UpdateDriver(id, request);
+                int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+                _driverService.UpdateDriver(id, request, userId);
                 return NoContent();
             }
             catch (Exception ex)
