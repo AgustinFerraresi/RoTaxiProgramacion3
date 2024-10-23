@@ -15,10 +15,12 @@ namespace Application.Services
     public class RideService : IRideService
     {
         private readonly IRideRepository _rideRepository;
+        private readonly IPassengerRepository _passengerRepository;
 
-        public RideService(IRideRepository rideRepository)
+        public RideService(IRideRepository rideRepository, IPassengerRepository passengerRepository)
         {
             _rideRepository = rideRepository;
+            _passengerRepository = passengerRepository;
         }
 
         public List<RideDto> GetAll()
@@ -29,30 +31,33 @@ namespace Application.Services
 
         public RideDto? GetById(int id)
         {
-            var ride = _rideRepository.GetById(id);
-            return ride != null ? RideDto.Create(ride) : null;
+            var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Ride {id} not found");
+            return RideDto.Create(ride);
         }
 
-        public RideDto Create(RideCreateRequest request)
+        public RideDto CreateRide(RideCreateRequest request, int userId)
         {
+            var authenticatedPassenger = _passengerRepository.GetById(userId);
+
             Ride ride = new Ride();
+            ride.Passenger = authenticatedPassenger;
             ride.Location = request.Location;
             ride.Destination = request.Destination;
             ride.Date = request.Date;
             ride.Cost = request.Cost;
             ride.PaymentMethod = request.PaymentMethod;
+            ride.Message = request.Message;
 
             _rideRepository.Add(ride);
             return RideDto.Create(ride);
         }
 
-        public void Delete(int id)
+        public void Delete(int id, int userId)
         {
-            var ride = _rideRepository.GetById(id);
-            if (ride == null)
-            {
-                throw new NotFoundException("Viaje not found.");
-            }
+            Passenger authenticatedPassenger = _passengerRepository.GetById(userId);
+
+            var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Ride {id} not found");
+            if (ride.Passenger.Id != authenticatedPassenger.Id) throw new NotAllowedException("Acceso denegado.");
             _rideRepository.Delete(ride);
         }
 
@@ -65,6 +70,7 @@ namespace Application.Services
             ride.Date = request.Date ?? ride.Date;
             ride.Cost = request.Cost ?? ride.Cost;
             ride.PaymentMethod = request.PaymentMethod ?? ride.PaymentMethod;
+            ride.Message = request.Message ?? ride.Message;
 
             _rideRepository.Update(ride);
         }

@@ -29,19 +29,17 @@ namespace Application.Services
         }
 
         //en cada uno de los metodos se puede usar logica adicional para hacer verificaciones y demas cosas si fuese necesario
-        public void DeleteDriver(int id)
+        public void DeleteDriver(int id, int userId)
         {
-            var driver = _driverRepository.GetById(id);
-            if (driver == null)
-            {
-                throw new NotFoundException("Passenger not found.");
-            }
+            var driver = _driverRepository.GetById(id) ?? throw new NotFoundException($"Conductor {id} no encontrado."); ;
+            if (driver.Id != userId) throw new NotAllowedException("Acceso denegado.");
             _driverRepository.Delete(driver);
         }
 
-        public void UpdateDriver(int id, DriverUpdateRequest request)
+        public void UpdateDriver(int id, DriverUpdateRequest request, int userId)
         {
-            var driver = _driverRepository.GetById(id) ?? throw new NotFoundException($"Pasajero {id} no encontrado.");
+            var driver = _driverRepository.GetById(id) ?? throw new NotFoundException($"Conductor {id} no encontrado.");
+            if (driver.Id != userId) throw new NotAllowedException("Acceso denegado.");
 
             driver.Name = request.Name ?? driver.Name;
             driver.Email = request.Email ?? driver.Email;

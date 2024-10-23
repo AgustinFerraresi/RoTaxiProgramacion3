@@ -12,9 +12,9 @@ namespace Application.Interfaces
     public interface IPassangerService
     {
         PassengerDto Create(PassengerCreateRequest request);
-        void Delete(int id);
+        void Delete(int id, int userId);
         List<PassengerDto> GetAll();
         PassengerDto? GetById(int id);
-        void Update(int id, PassengerUpdateRequest request);
+        void Update(int id, PassengerUpdateRequest request, int userId);
     }
 }

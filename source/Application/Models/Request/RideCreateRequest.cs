@@ -14,5 +14,6 @@ namespace Application.Models.Request
         public string Destination { get; set; }
         public float Cost { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
+        public string? Message { get; set; }
     }
 }

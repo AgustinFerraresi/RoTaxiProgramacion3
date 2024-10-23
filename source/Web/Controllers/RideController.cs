@@ -1,9 +1,11 @@
-﻿using Application.Interfaces;
+﻿using System.Security.Claims;
+using Application.Interfaces;
 using Application.Models;
 using Application.Models.Request;
 using Application.Services;
 using Domain.Classes;
 using Domain.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,19 +13,30 @@ namespace Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class RideController : ControllerBase
     {
         private readonly IRideService _rideService;
-        public RideController(IRideService rideService)
+        private readonly IPassangerService _passangerService;
+        public RideController(IRideService rideService, IPassangerService passangerService)
         {
             _rideService = rideService;
+            _passangerService = passangerService;
         }
 
         [HttpPost("[action]")]
-        public IActionResult Create([FromBody] RideCreateRequest request)
+        
+        public IActionResult CreateRide([FromBody] RideCreateRequest request)
         {
-            var result = _rideService.Create(request);
-            return Ok(result);
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
+            if (userRole != "Passenger")
+            {
+                return Unauthorized();
+            }
+
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            var result = _rideService.CreateRide(request, userId);
+            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
         [HttpGet]
@@ -64,10 +77,11 @@ namespace Web.Controllers
         {
             try
             {
-                _rideService.Delete(id);
+                int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+                _rideService.Delete(id, userId);
                 return NoContent();
             }
-            catch (NotFoundException ex)
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
