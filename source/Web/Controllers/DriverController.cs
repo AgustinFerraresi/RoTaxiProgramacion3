@@ -109,5 +109,17 @@ namespace Web.Controllers
             var result = _driverService.DeleteDriverVehicle(driverId, vehicleId);
             return result ? Ok("Vehiculo eliminado correctamente") : BadRequest("Error al eliminar el vehiculo");
         }
+
+        // SACAR EL COMENTADO DESPUES EL METODO EL METODO SIRVE
+        //[HttpPost("[action]/{driverId}/{rideId}")]
+        //public IActionResult TakeARide(int driverId, int rideId)
+        //{
+        //    var result = _driverService.AcceptDrive(driverId, rideId);
+        //    if (result == true)
+        //    {
+        //        return Ok("Viaje aceptado correctamente");
+        //    }
+        //    return BadRequest("Error al intentar aceptar el viaje");
+        //}
     }  
 }

@@ -16,11 +16,12 @@ namespace Application.Services
     {
         private readonly IDriverRepository _driverRepository;
         private readonly IVehicleRepository _vehicleRepository;
-
-        public DriverService(IDriverRepository driverRepository, IVehicleRepository vehicleRepository)
+        private readonly IRideRepository _rideRepository
+        public DriverService(IDriverRepository driverRepository, IVehicleRepository vehicleRepository,IRideRepository rideRepository)
         {
             _driverRepository = driverRepository;
             _vehicleRepository = vehicleRepository;
+            _rideRepository = rideRepository;
         }
 
         public DriverDto CreateDriver(DriverCreateRequest request)
@@ -114,5 +115,18 @@ namespace Application.Services
             }
             return false;
         }
+
+        // SACAR EL COMENTADO DESPUES EL METODO EL METODO SIRVE
+        //public bool AcceptDrive(int driverId,int rideId)
+        //{
+        //    var ride = _rideRepository.GetById(rideId);
+        //    var driver = _driverRepository.GetById(driverId);
+        //    if (driver == null || ride == null || driver.Available == false)
+        //    {
+        //        return false;
+        //    }
+        //    driver.Available = false;
+        //    return true;
+        //}
     }
 }

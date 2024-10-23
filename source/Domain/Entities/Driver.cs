@@ -13,7 +13,7 @@ namespace Domain.Classes
         public List<Vehicle> _vehicles { get; set; }
         public Driver(string name, string email, string password, int dni) : base(name, email, password, dni)
         {
-            Available = false;
+            Available = true;
             _vehicles = new List<Vehicle>();
         }
     }

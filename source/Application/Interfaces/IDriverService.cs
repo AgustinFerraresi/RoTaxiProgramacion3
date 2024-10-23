@@ -20,5 +20,7 @@ namespace Application.Interfaces
         bool AddVehicle(int driverId, int vehicleId);
         List<VehicleDto>? GetAllDriverVehicles(int driverId);
         bool DeleteDriverVehicle(int driverId, int vehicleId);
+        // SACAR EL COMENTADO DESPUES EL METODO EL METODO SIRVE
+        //bool AcceptDrive(int driverId, int rideId);
     }
 }
