@@ -25,7 +25,6 @@ namespace Web.Controllers
         }
 
         [HttpPost("[action]")]
-        
         public IActionResult CreateRide([FromBody] RideCreateRequest request)
         {
             var userRole = User.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
@@ -39,11 +38,13 @@ namespace Web.Controllers
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
         }
 
+
         [HttpGet]
         public IActionResult GetAll()
         {
             return Ok(_rideService.GetAll());
         }
+
 
         [HttpGet("id/{id}")]
         public IActionResult GetById(int id)
@@ -58,12 +59,14 @@ namespace Web.Controllers
             }
         }
 
+
         [HttpPut("{id}")]
         public IActionResult Update([FromRoute] int id, [FromBody] RideUpdateRequest request)
         {
             try
             {
-                _rideService.Update(id, request);
+                int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+                _rideService.Update(id, request, userId);
                 return NoContent();
             }
             catch (Exception ex)
@@ -71,6 +74,7 @@ namespace Web.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
 
         [HttpDelete("{id}")]
         public IActionResult Delete([FromRoute] int id)

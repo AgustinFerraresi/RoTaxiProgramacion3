@@ -23,18 +23,6 @@ namespace Application.Services
             _passengerRepository = passengerRepository;
         }
 
-        public List<RideDto> GetAll()
-        {
-            var rides = _rideRepository.GetAll();
-            return rides.Select(RideDto.Create).ToList();
-        } 
-
-        public RideDto? GetById(int id)
-        {
-            var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Ride {id} not found");
-            return RideDto.Create(ride);
-        }
-
         public RideDto CreateRide(RideCreateRequest request, int userId)
         {
             var authenticatedPassenger = _passengerRepository.GetById(userId);
@@ -52,18 +40,24 @@ namespace Application.Services
             return RideDto.Create(ride);
         }
 
-        public void Delete(int id, int userId)
+        public List<RideDto> GetAll()
+        {
+            var rides = _rideRepository.GetAll();
+            return rides.Select(RideDto.Create).ToList();
+        } 
+
+        public RideDto? GetById(int id)
+        {
+            var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Ride {id} not found");
+            return RideDto.Create(ride);
+        }
+
+        public void Update(int id, RideUpdateRequest request, int userId)
         {
             Passenger authenticatedPassenger = _passengerRepository.GetById(userId);
 
-            var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Ride {id} not found");
-            if (ride.Passenger.Id != authenticatedPassenger.Id) throw new NotAllowedException("Acceso denegado.");
-            _rideRepository.Delete(ride);
-        }
-
-        public void Update(int id, RideUpdateRequest request)
-        {
             var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Viaje {id} no encontrado.");
+            if (ride.Passenger.Id != authenticatedPassenger.Id) throw new NotAllowedException("Acceso denegado.");
 
             ride.Location = request.Location ?? ride.Location;
             ride.Destination = request.Destination ?? ride.Destination;
@@ -73,6 +67,15 @@ namespace Application.Services
             ride.Message = request.Message ?? ride.Message;
 
             _rideRepository.Update(ride);
+        }
+
+        public void Delete(int id, int userId)
+        {
+            Passenger authenticatedPassenger = _passengerRepository.GetById(userId);
+
+            var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Ride {id} not found");
+            if (ride.Passenger.Id != authenticatedPassenger.Id) throw new NotAllowedException("Acceso denegado.");
+            _rideRepository.Delete(ride);
         }
     }
 }
