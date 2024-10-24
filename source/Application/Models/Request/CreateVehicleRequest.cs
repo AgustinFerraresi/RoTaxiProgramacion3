@@ -17,7 +17,5 @@ namespace Application.Models.Request
         public int year { get; set; }
         [Required]
         public string model { get; set; }
-        [Required]
-        public string patente { get; set; }
     }
 }

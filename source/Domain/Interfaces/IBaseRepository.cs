@@ -14,5 +14,7 @@ namespace Domain.Interfaces
         List<T> GetAll();
         T? GetById<TId> (TId id);
         void Update(T entity);
+
+        //public async T? GetFullObjById(int id);
     }
 }

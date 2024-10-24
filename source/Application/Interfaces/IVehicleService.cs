@@ -16,6 +16,8 @@ namespace Application.Interfaces
         bool DeleteVehicle(int id);
         List<VehicleDto> GetAllVehicles();
         VehicleDto GetVehicleById(int id);
-        VehicleDto UpdateVehicle(VehicleUpdateRequest request, int id);
+        VehicleDto? UpdateVehicle(VehicleUpdateRequest request, int id);
+        //Vehicle GetFullVehicleById(int id);
+        List<DriverDto>? GetAllDrivers(int vehicleId);
     }
 }

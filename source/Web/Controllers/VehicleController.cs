@@ -3,6 +3,7 @@ using Application.Models;
 using Application.Models.Request;
 using Domain.Classes;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,6 +12,7 @@ namespace Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+
     public class VehicleController : ControllerBase
     {
         private readonly IVehicleService _vehicleService;
@@ -20,10 +22,6 @@ namespace Web.Controllers
             _vehicleService = vehicleService;
         }
 
-        //en los parametros van los dto
-        //la responsabilidad de los controllers tiene que ser netamente de interfaz osea, es como un pasa mano,
-        //no tiene que crear nada ningun objeto ni nada por el estilo, crear un objeto es algo que le corresponde a un 
-        //servicio
         [HttpPost("[action]")]
         public IActionResult CreateVehicle([FromBody] CreateVehicleRequest request)
         {
@@ -42,7 +40,11 @@ namespace Web.Controllers
         public IActionResult GetAllVehicles()
         {
             List<VehicleDto> vehicles = _vehicleService.GetAllVehicles();
-            return Ok(vehicles);            
+            if (vehicles.Count > 0)
+            {
+                return Ok(vehicles);
+            }
+            return Ok("No hay vehiculos");
         }
 
         [HttpGet("id/{id}")]
@@ -54,14 +56,36 @@ namespace Web.Controllers
                 return Ok(vehicle);
             }
 
-            return BadRequest(vehicle);
+            return BadRequest("Vehiculo no encontrado");
         }
 
         [HttpPut("{id}")]
         public IActionResult UpdateVehicle([FromBody] VehicleUpdateRequest request, int id)
         {
             var result = _vehicleService.UpdateVehicle(request, id);
-            return Ok(result);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return BadRequest("Error al actualizar el vehiculo");
+        }
+
+        [HttpGet("[action]{vehicleId}")]
+        public IActionResult GetDriversVehicle(int vehicleId)
+        {
+            List<DriverDto>? driversList = _vehicleService.GetAllDrivers(vehicleId);
+
+            if (driversList == null)
+            {
+                return BadRequest("Vehiculo no encontrado");
+            }
+
+            if (driversList.Count == 0)
+            {
+                return Ok("El vehiculo no tiene conductores");
+            }
+
+            return Ok(driversList);
         }
     }
 }

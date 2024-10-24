@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace Domain.Classes
@@ -15,17 +16,29 @@ namespace Domain.Classes
         public string Brand { get; set; }
         public int Year { get; set; }
         public string Model { get; set; }
-        public string Patente { get; set; }
+        public List<Driver> Drivers { get; set; }
+
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public Vehicle(string brand, int year, string model, string patente)
+        public Vehicle(string brand, int year, string model)
         {
             Brand = brand;
             Year = year;
             Model = model;
-            Patente = patente;
         }
+
+        public void AddDriver(Driver driver)
+        {
+            if (Drivers.Contains(driver))
+            {
+                return;
+            }
+            Drivers.Add(driver);
+            return;
+        }
+
+        //public IReadOnlyList<Driver> Drivers => _drivers;
     }
 }

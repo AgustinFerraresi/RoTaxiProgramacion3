@@ -1,5 +1,6 @@
+﻿using Application.Interfaces;
+using Application.Models;
 ﻿using System.Security.Claims;
-using Application.Interfaces;
 using Application.Models.Request;
 using Application.Services;
 using Domain.Classes;
@@ -21,6 +22,7 @@ namespace Web.Controllers
             _driverService = driverService;
         }
 
+
         [HttpPost("[action]")]
         [AllowAnonymous]
         public IActionResult Create([FromBody] DriverCreateRequest request)
@@ -29,12 +31,14 @@ namespace Web.Controllers
             return Ok(result);
         }
 
+
         [HttpGet]
         [AllowAnonymous]
         public IActionResult GetAll()
         {
             return Ok(_driverService.GetAllDrivers());
         }
+
 
         [HttpGet("id/{id}")]
         public IActionResult GetDriverById(int id)
@@ -48,6 +52,7 @@ namespace Web.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
 
         [HttpDelete("{id}")]
         public IActionResult DeleteDriver([FromRoute] int id)
@@ -64,8 +69,9 @@ namespace Web.Controllers
             }
         }
 
-        [HttpPut("{id}")]
 
+
+        [HttpPut("{id}")]
         public IActionResult UpdateDriver([FromRoute]  int id, [FromBody] DriverUpdateRequest request) 
         {
             try
@@ -79,5 +85,49 @@ namespace Web.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+
+        [HttpGet("[action]/{driverId}")]
+        public IActionResult GetDriverVehicles(int driverId)
+        {
+            var result = _driverService.GetAllDriverVehicles(driverId);
+            if (result == null)
+            {
+                return NotFound("Error al buscar el conductor.");
+            }
+            if (result.Count == 0)
+            {
+                return BadRequest("El conductor no tiene vehiculos");
+            }
+            return Ok(result);
+        }
+
+
+        [HttpPost("[action]/{driverId}/{vehicleId}")]
+        public IActionResult AddVehicle(int driverId, int vehicleId)
+        {
+            var result = _driverService.AddVehicle(driverId, vehicleId);
+            return result ? Ok("Vehiculo agregado correctamente") : BadRequest("Error al agregar el vehiculo");
+        }
+
+
+        [HttpPost("[action]/{driverId}/{vehicleId}")]
+        public IActionResult DeleteDriverVehicle(int driverId, int vehicleId)
+        {
+            var result = _driverService.DeleteDriverVehicle(driverId, vehicleId);
+            return result ? Ok("Vehiculo eliminado correctamente") : BadRequest("Error al eliminar el vehiculo");
+        }
+
+        // SACAR EL COMENTADO DESPUES EL METODO EL METODO SIRVE
+        //[HttpPost("[action]/{driverId}/{rideId}")]
+        //public IActionResult TakeARide(int driverId, int rideId)
+        //{
+        //    var result = _driverService.AcceptDrive(driverId, rideId);
+        //    if (result == true)
+        //    {
+        //        return Ok("Viaje aceptado correctamente");
+        //    }
+        //    return BadRequest("Error al intentar aceptar el viaje");
+        //}
     }  
 }

@@ -9,11 +9,11 @@ namespace Domain.Interfaces
 {
     public interface IDriverRepository : IBaseRepository<Driver>
     {
-        //si driver tuviese metodos exclusivos respecto a las demas clases sus firmas irian aca
-
-        public Driver GetById(int id);
-
+        Driver?  GetById(int id);
+        Driver GetFullDriverById(int id);
+        void AddVehicle(Driver driver, Vehicle vehicle);
+        List<Vehicle> GetDriverVehicles(Driver driver);
+        void DeleteVehicle(Driver driver, Vehicle vehicle);
         public Driver? AutenticarDriver(string email, string password);
-
     }
 }

@@ -17,18 +17,18 @@ namespace Infrastructure.Data
             _context = context;
         }
 
-        //public Vehicle? GetVehicleById(int id)
-        //{
-        //    return _context.Vehicles.FirstOrDefault(vehicle => vehicle.Id == id);
-        //}
+        public Vehicle GetFullVehicleById(int id)
+        {
+            //return _context.Vehicles.FirstOrDefault(vehicle => vehicle.Id == id);
+            return _context.Vehicles.Include(i => i.Drivers).FirstOrDefault(vehicle => vehicle.Id == id);
+        }
+
+
+        public List<Driver> GetDrivers(Vehicle vehicle)
+        {
+            List<Driver> drivers = vehicle.Drivers;
+            return drivers;
+        }
     }
 }
-
-
-//aca lo que se hace es inyectar el contexto en la siguiente linea:
-//"private readonly ApplicationContext _context;"
-//y lo que hago es pasarselo al constructor de la clase padre osea BaseRepository que será inicializado en su constructor
-//asi es como paso el contexto al padre: "public VehicleRepository(ApplicationContext context) : base(context)"
-//pero ademas tengo que iniciarlizarlo en este constructor ya que tengo un metodo exclusivo de este repositorio por lo cual
-//aca tambien necesito el contexto
 

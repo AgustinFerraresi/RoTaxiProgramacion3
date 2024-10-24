@@ -3,6 +3,7 @@ using System;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20241018222348_Drivers-Vehicles")]
+    partial class DriversVehicles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
@@ -95,18 +98,10 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("Message")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("PassengerId")
-                        .HasColumnType("INTEGER");
-
                     b.Property<int>("PaymentMethod")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("PassengerId");
 
                     b.ToTable("Rides");
                 });
@@ -147,17 +142,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex("_vehiclesId");
 
                     b.ToTable("DriverVehicle");
-                });
-
-            modelBuilder.Entity("Domain.Classes.Ride", b =>
-                {
-                    b.HasOne("Domain.Classes.Passenger", "Passenger")
-                        .WithMany()
-                        .HasForeignKey("PassengerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Passenger");
                 });
 
             modelBuilder.Entity("DriverVehicle", b =>
