@@ -123,17 +123,33 @@ namespace Application.Services
             return false;
         }
 
-        // SACAR EL COMENTADO DESPUES EL METODO EL METODO SIRVE
-        //public bool AcceptDrive(int driverId,int rideId)
-        //{
-        //    var ride = _rideRepository.GetById(rideId);
-        //    var driver = _driverRepository.GetById(driverId);
-        //    if (driver == null || ride == null || driver.Available == false)
-        //    {
-        //        return false;
-        //    }
-        //    driver.Available = false;
-        //    return true;
-        //}
+
+        public bool AcceptRide(int driverId, int rideId, int userId)
+        {
+            var ride = _rideRepository.GetById(rideId);
+            Driver? driver = _driverRepository.GetFullDriverById(driverId);
+            if (driver.Id != userId) throw new NotAllowedException("Acceso denegado.");
+
+            if (driver == null || ride == null || driver.Available == false)
+            {
+                return false;
+            }
+            _driverRepository.AcceptRide(driver);
+            return true;
+        }
+
+
+        public bool EndRide(int driverId, int userId)
+        {
+            Driver? driver = _driverRepository.GetFullDriverById(driverId);
+            if (driver.Id != userId) throw new NotAllowedException("Acceso denegado.");
+
+            if (driver == null || driver.Available == true)
+            {
+                return false;
+            }
+            _driverRepository.EndRide(driver);
+            return true;
+        }
     }
 }

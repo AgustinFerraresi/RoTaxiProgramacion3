@@ -22,7 +22,7 @@ namespace Infrastructure.Data
             return _context.Drivers.FirstOrDefault(driver => driver.Id == id);
         }
  
-        public Driver GetFullDriverById(int id)
+        public Driver? GetFullDriverById(int id)
         {
             return _context.Drivers.Include(i => i._vehicles).FirstOrDefault(driver => driver.Id == id);
         }
@@ -50,5 +50,19 @@ namespace Infrastructure.Data
             return _context.Drivers.SingleOrDefault(u => u.Email == email && u.Password == password);
 
         }
+
+        public void AcceptRide(Driver driver)
+        {
+            driver.Available = false;
+            _context.SaveChanges();
+        }
+
+        public void EndRide(Driver driver)
+        {
+            driver.Available = true;
+            _context.SaveChanges();
+        }
+
+
     }
 }

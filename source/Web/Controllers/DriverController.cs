@@ -71,14 +71,14 @@ namespace Web.Controllers
         }
 
 
-        [HttpPut("{id}")]
+        [HttpPut("[action]/{id}")]
         public IActionResult UpdateDriver([FromRoute]  int id, [FromBody] DriverUpdateRequest request) 
         {
             try
             {
                 int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
                 _driverService.UpdateDriver(id, request, userId);
-                return NoContent();
+                return Ok("Conductor actualizado correctamente.");
             }
             catch (Exception ex)
             {
@@ -135,16 +135,30 @@ namespace Web.Controllers
             }
         }
 
-        // SACAR EL COMENTADO DESPUES EL METODO EL METODO SIRVE
-        //[HttpPost("[action]/{driverId}/{rideId}")]
-        //public IActionResult TakeARide(int driverId, int rideId)
-        //{
-        //    var result = _driverService.AcceptDrive(driverId, rideId);
-        //    if (result == true)
-        //    {
-        //        return Ok("Viaje aceptado correctamente");
-        //    }
-        //    return BadRequest("Error al intentar aceptar el viaje");
-        //}
+        
+       [HttpPost("[action]/{driverId}/{rideId}")]
+       public IActionResult TakeARide(int driverId, int rideId)
+       {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            var result = _driverService.AcceptRide(driverId, rideId, userId);
+            if (result == true)
+            {
+                return Ok("viaje aceptado correctamente");
+            }
+            return BadRequest("error al intentar aceptar el viaje");
+       }
+
+
+        [HttpPost("[action]/{driverId}")]
+        public IActionResult FinishRide(int driverId)
+        {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            var result = _driverService.EndRide(driverId, userId);
+            if (result == true)
+            {
+                return Ok("viaje terminado o cancelado correctamente");
+            }
+            return BadRequest("error al intentar terminar o cancelar el viaje");
+        }
     }  
 }
