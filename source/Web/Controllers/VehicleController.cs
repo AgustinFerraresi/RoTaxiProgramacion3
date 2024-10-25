@@ -4,6 +4,7 @@ using Application.Models;
 using Application.Models.Request;
 using Domain.Classes;
 using Domain.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,6 +14,7 @@ namespace Web.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
 
     public class VehicleController : ControllerBase
     {
@@ -27,6 +29,11 @@ namespace Web.Controllers
         public IActionResult CreateVehicle([FromBody] CreateVehicleRequest request)
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
+            if (userRole != "Driver")
+            {
+                return Unauthorized();
+            }
 
             VehicleDto result = _vehicleService.CreateVehicle(request, userId);
             return Ok(result);
