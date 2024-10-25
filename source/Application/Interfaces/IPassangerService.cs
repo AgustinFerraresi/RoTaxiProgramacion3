@@ -11,10 +11,11 @@ namespace Application.Interfaces
 {
     public interface IPassangerService
     {
-        PassengerDto Create(PassengerCreateRequest request);
-        void Delete(int id, int userId);
+        PassengerDto CreatePassenger(PassengerCreateRequest request);
         List<PassengerDto> GetAll();
-        PassengerDto? GetById(int id);
-        void Update(int id, PassengerUpdateRequest request, int userId);
+        PassengerDto? GetPassengerById(int id);
+        PassengerDto? GetPassengerByName(string name);
+        void UpdatePassenger(int id, PassengerUpdateRequest request, int userId);
+        void DeletePassenger(int id, int userId);
     }
 }

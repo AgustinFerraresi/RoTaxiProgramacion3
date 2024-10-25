@@ -21,29 +21,16 @@ namespace Application.Services
             _driverRepository = driverRepository;
         }
 
-        public VehicleDto CreateVehicle(CreateVehicleRequest request)
+        public VehicleDto CreateVehicle(CreateVehicleRequest request, int userId)
         {
             Vehicle newVehicle = new Vehicle(request.brand, request.year, request.model);
+            Driver driver = _driverRepository.GetFullDriverById(userId);
+
+            newVehicle.Drivers.Add(driver);
             _vehicleRepository.Add(newVehicle);
             return VehicleDto.Create(newVehicle);
         }
-
-        public bool DeleteVehicle(int id)
-        {
-            var vehicleToDelete = _vehicleRepository.GetById(id);
-            if (vehicleToDelete != null)
-            {
-                _vehicleRepository.Delete(vehicleToDelete);
-                return true;
-            }
-            return false;
-        }
         
-        public VehicleDto GetVehicleById(int id)
-        {
-            var vehicle = _vehicleRepository.GetById(id);
-            return vehicle != null ? VehicleDto.Create(vehicle) : null; 
-        }
 
         public List<VehicleDto> GetAllVehicles()
         {
@@ -51,20 +38,11 @@ namespace Application.Services
             return vehicles.Select(vehicle => VehicleDto.Create(vehicle)).ToList();
         }
 
-        public VehicleDto? UpdateVehicle(VehicleUpdateRequest request, int id)
+
+        public VehicleDto GetVehicleById(int id)
         {
-            Vehicle vehicleToUpdate = _vehicleRepository.GetById(id);
-            if (vehicleToUpdate != null)
-            {
-                vehicleToUpdate.Brand = request.brand ?? vehicleToUpdate.Brand;
-                vehicleToUpdate.Model = request.model ?? vehicleToUpdate.Model;
-                vehicleToUpdate.Year = request.year.HasValue ? request.year.Value : vehicleToUpdate.Year;
-
-                _vehicleRepository.Update(vehicleToUpdate);
-                return VehicleDto.Create(vehicleToUpdate);
-            }
-
-            return null;
+            var vehicle = _vehicleRepository.GetById(id);
+            return vehicle != null ? VehicleDto.Create(vehicle) : null; 
         }
 
 
@@ -80,5 +58,38 @@ namespace Application.Services
             return null;
         }
 
+
+        public VehicleDto? UpdateVehicle(VehicleUpdateRequest request, int id, int userId)
+        {
+            
+            var vehicleToUpdate = _vehicleRepository.GetFullVehicleById(id);
+
+            if (vehicleToUpdate != null && vehicleToUpdate.Drivers.Any(d => d.Id == userId))
+            {
+                vehicleToUpdate.Brand = request.brand ?? vehicleToUpdate.Brand;
+                vehicleToUpdate.Model = request.model ?? vehicleToUpdate.Model;
+                vehicleToUpdate.Year = request.year.HasValue ? request.year.Value : vehicleToUpdate.Year;
+
+                _vehicleRepository.Update(vehicleToUpdate);
+                return VehicleDto.Create(vehicleToUpdate);
+            }
+
+            return null;
+        }
+
+
+        public bool DeleteVehicle(int id, int userId)
+        {
+            
+
+            var vehicleToDelete = _vehicleRepository.GetFullVehicleById(id);
+            if (vehicleToDelete != null && vehicleToDelete.Drivers.Any(d => d.Id == userId)) 
+            {
+                _vehicleRepository.Delete(vehicleToDelete);
+                return true;
+            }
+
+            return false;
+        }
     }
 }

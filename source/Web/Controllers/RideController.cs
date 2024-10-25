@@ -24,7 +24,7 @@ namespace Web.Controllers
             _passangerService = passangerService;
         }
 
-        [HttpPost("[action]")]
+        [HttpPost]
         public IActionResult CreateRide([FromBody] RideCreateRequest request)
         {
             var userRole = User.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
@@ -52,6 +52,21 @@ namespace Web.Controllers
             try
             {
                 return Ok(_rideService.GetById(id));
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet("passengerName/{passengerName}")]
+        public IActionResult GetRidesByPassenger(string passengerName)
+        {
+            try
+            {
+                var rides = _rideService.GetRidesByPassenger(passengerName);
+                return Ok(rides);
             }
             catch (NotFoundException ex)
             {

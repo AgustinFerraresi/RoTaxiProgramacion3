@@ -1,4 +1,5 @@
-﻿using Application.Interfaces;
+﻿using System.Security.Claims;
+using Application.Interfaces;
 using Application.Models;
 using Application.Models.Request;
 using Domain.Classes;
@@ -22,21 +23,17 @@ namespace Web.Controllers
             _vehicleService = vehicleService;
         }
 
-        [HttpPost("[action]")]
+        [HttpPost]
         public IActionResult CreateVehicle([FromBody] CreateVehicleRequest request)
         {
-            VehicleDto result = _vehicleService.CreateVehicle(request);
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+
+            VehicleDto result = _vehicleService.CreateVehicle(request, userId);
             return Ok(result);
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteVehicle(int id)
-        {
-            var result = _vehicleService.DeleteVehicle(id);
-            return result ? Ok("El vehiculo se eliminó exitosamente") : Ok("Error el eliminar el vehiculo");
-        }
 
-        [HttpGet("[action]")]
+        [HttpGet]
         public IActionResult GetAllVehicles()
         {
             List<VehicleDto> vehicles = _vehicleService.GetAllVehicles();
@@ -46,6 +43,7 @@ namespace Web.Controllers
             }
             return Ok("No hay vehiculos");
         }
+
 
         [HttpGet("id/{id}")]
         public IActionResult GetVehicleById(int id)
@@ -59,18 +57,8 @@ namespace Web.Controllers
             return BadRequest("Vehiculo no encontrado");
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateVehicle([FromBody] VehicleUpdateRequest request, int id)
-        {
-            var result = _vehicleService.UpdateVehicle(request, id);
-            if (result != null)
-            {
-                return Ok(result);
-            }
-            return BadRequest("Error al actualizar el vehiculo");
-        }
 
-        [HttpGet("[action]{vehicleId}")]
+        [HttpGet("[action]/{vehicleId}")]
         public IActionResult GetDriversVehicle(int vehicleId)
         {
             List<DriverDto>? driversList = _vehicleService.GetAllDrivers(vehicleId);
@@ -86,6 +74,29 @@ namespace Web.Controllers
             }
 
             return Ok(driversList);
+        }
+
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateVehicle([FromBody] VehicleUpdateRequest request, int id)
+        {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+            var result = _vehicleService.UpdateVehicle(request, id, userId);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return BadRequest("Error al actualizar el vehiculo");
+        }
+
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteVehicle(int id)
+        {
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+
+            var result = _vehicleService.DeleteVehicle(id, userId);
+            return result ? Ok("El vehiculo se eliminó exitosamente") : Ok("Error el eliminar el vehiculo");
         }
     }
 }

@@ -12,12 +12,14 @@ namespace Application.Interfaces
 {
     public interface IVehicleService 
     {
-        VehicleDto CreateVehicle(CreateVehicleRequest request);
-        bool DeleteVehicle(int id);
+        VehicleDto CreateVehicle(CreateVehicleRequest request, int userId);
+     
         List<VehicleDto> GetAllVehicles();
         VehicleDto GetVehicleById(int id);
-        VehicleDto? UpdateVehicle(VehicleUpdateRequest request, int id);
+        
         //Vehicle GetFullVehicleById(int id);
         List<DriverDto>? GetAllDrivers(int vehicleId);
+        VehicleDto? UpdateVehicle(VehicleUpdateRequest request, int id, int userId);
+        bool DeleteVehicle(int id, int userId);
     }
 }

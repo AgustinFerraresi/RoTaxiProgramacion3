@@ -15,6 +15,7 @@ namespace Application.Interfaces
         RideDto CreateRide(RideCreateRequest request, int userId);
         List<RideDto> GetAll();
         RideDto? GetById(int id);
+        List<RideDto> GetRidesByPassenger(string passengerId);
         void Update(int id, RideUpdateRequest request, int userId);
         void Delete(int id, int userId);
     }

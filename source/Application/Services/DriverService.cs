@@ -63,17 +63,19 @@ namespace Application.Services
 
         public DriverDto? GetDriverById(int id)
         {
-            var driver = _driverRepository.GetById(id);
-            return driver != null ? DriverDto.Create(driver) : null;
+            var driver = _driverRepository.GetById(id) ?? throw new NotFoundException($"Conductor {id} no encontrado");
+            return DriverDto.Create(driver);
         }
 
 
-        public bool AddVehicle(int driverId, int vehicleId)
+        public bool AddVehicle(int driverId, int vehicleId, int userId)
         {
-            Driver driver = _driverRepository.GetFullDriverById(driverId);
-            Vehicle vehicle = _vehicleRepository.GetFullVehicleById(vehicleId);
+            Driver driver = _driverRepository.GetById(driverId) ?? throw new NotFoundException($"Conductor no encontrado.");
+            if (driver.Id != userId) throw new NotAllowedException("Acceso denegado.");
 
-            if (driver != null && vehicle != null && !(driver._vehicles.Contains(vehicle)))
+            Vehicle vehicle = _vehicleRepository.GetFullVehicleById(vehicleId) ?? throw new NotFoundException($"Vehículo {vehicleId} no encontrado.");
+
+            if (!driver._vehicles.Contains(vehicle))
             {
                 _driverRepository.AddVehicle(driver, vehicle); //agrego un vehiculo a un conductor
                 return true;
@@ -99,12 +101,20 @@ namespace Application.Services
         }
 
 
-        public bool DeleteDriverVehicle(int driverId, int vehicleId)
+        public bool DeleteDriverVehicle(int driverId, int vehicleId, int userId)
         {
             Driver driver = _driverRepository.GetFullDriverById(driverId);
             Vehicle vehicle = _vehicleRepository.GetFullVehicleById(vehicleId);
 
-            if (driver != null && vehicle != null && driver._vehicles.Contains(vehicle))
+            if (driver == null) throw new NotFoundException($"Conductor {driverId} no encontrado.");
+            if (vehicle == null) throw new NotFoundException($"Vehículo {vehicleId} no encontrado.");
+
+            if (driver.Id != userId)
+            {
+                throw new UnauthorizedAccessException("Solo el propietario del vehículo puede eliminarlo.");
+            }
+
+            if (driver._vehicles.Contains(vehicle))
             {
                 _driverRepository.DeleteVehicle(driver,vehicle);//elimino un vehiculo de un conductor
                 //_vehicleRepository.DeleteDriverFromVehicle(vehicle, driver);//elimino un conductor de un vehiculo

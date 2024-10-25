@@ -9,6 +9,7 @@ namespace Domain.Interfaces
 {
     public interface IPassengerRepository : IBaseRepository<Passenger>
     {
+        public Passenger? GetPassengerByName(string passengerName);
         public Passenger? AutenticatePassenger(string email, string password);
     }
 }

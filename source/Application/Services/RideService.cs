@@ -23,6 +23,7 @@ namespace Application.Services
             _passengerRepository = passengerRepository;
         }
 
+
         public RideDto CreateRide(RideCreateRequest request, int userId)
         {
             var authenticatedPassenger = _passengerRepository.GetById(userId);
@@ -40,23 +41,35 @@ namespace Application.Services
             return RideDto.Create(ride);
         }
 
+
         public List<RideDto> GetAll()
         {
             var rides = _rideRepository.GetAll();
             return rides.Select(RideDto.Create).ToList();
         } 
 
+
         public RideDto? GetById(int id)
         {
-            var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Ride {id} not found");
+            var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Viaje {id} no encontrado");
             return RideDto.Create(ride);
         }
+
+
+        public List<RideDto> GetRidesByPassenger(string passengerName)
+        {
+            var passenger = _passengerRepository.GetPassengerByName(passengerName) ?? throw new NotFoundException($"Pasajero {passengerName} no encontrado");
+
+            var rides = _rideRepository.GetAll().Where(r => r.Passenger.Name == passengerName).ToList();
+            return rides.Select(RideDto.Create).ToList();
+        }
+
 
         public void Update(int id, RideUpdateRequest request, int userId)
         {
             Passenger authenticatedPassenger = _passengerRepository.GetById(userId);
 
-            var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Viaje {id} no encontrado.");
+            var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Viaje {id} no encontrado");
             if (ride.Passenger.Id != authenticatedPassenger.Id) throw new NotAllowedException("Acceso denegado.");
 
             ride.Location = request.Location ?? ride.Location;
@@ -69,11 +82,12 @@ namespace Application.Services
             _rideRepository.Update(ride);
         }
 
+
         public void Delete(int id, int userId)
         {
             Passenger authenticatedPassenger = _passengerRepository.GetById(userId);
 
-            var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Ride {id} not found");
+            var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Viaje {id} no encontrado");
             if (ride.Passenger.Id != authenticatedPassenger.Id) throw new NotAllowedException("Acceso denegado.");
             _rideRepository.Delete(ride);
         }

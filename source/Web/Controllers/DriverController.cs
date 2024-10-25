@@ -7,6 +7,7 @@ using Domain.Classes;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Web.Controllers
 {
@@ -23,7 +24,7 @@ namespace Web.Controllers
         }
 
 
-        [HttpPost("[action]")]
+        [HttpPost]
         [AllowAnonymous]
         public IActionResult Create([FromBody] DriverCreateRequest request)
         {
@@ -41,7 +42,7 @@ namespace Web.Controllers
 
 
         [HttpGet("id/{id}")]
-        public IActionResult GetDriverById(int id)
+        public IActionResult GetDriverById([FromRoute] int id)
         {
             try
             {
@@ -68,7 +69,6 @@ namespace Web.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
 
 
         [HttpPut("{id}")]
@@ -106,16 +106,33 @@ namespace Web.Controllers
         [HttpPost("[action]/{driverId}/{vehicleId}")]
         public IActionResult AddVehicle(int driverId, int vehicleId)
         {
-            var result = _driverService.AddVehicle(driverId, vehicleId);
-            return result ? Ok("Vehiculo agregado correctamente") : BadRequest("Error al agregar el vehiculo");
+            try
+            {
+                int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+
+                var result = _driverService.AddVehicle(driverId, vehicleId, userId);
+                return result ? Ok("Vehiculo agregado") : BadRequest("Error al agregar vehiculo.");
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
 
         [HttpPost("[action]/{driverId}/{vehicleId}")]
         public IActionResult DeleteDriverVehicle(int driverId, int vehicleId)
         {
-            var result = _driverService.DeleteDriverVehicle(driverId, vehicleId);
-            return result ? Ok("Vehiculo eliminado correctamente") : BadRequest("Error al eliminar el vehiculo");
+            try
+            {
+                int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+                var result = _driverService.DeleteDriverVehicle(driverId, vehicleId, userId);
+                return result ? Ok("Vehiculo eliminado correctamente.") : BadRequest("Error al eliminar el vehículo");
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // SACAR EL COMENTADO DESPUES EL METODO EL METODO SIRVE

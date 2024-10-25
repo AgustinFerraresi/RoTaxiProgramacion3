@@ -17,9 +17,9 @@ namespace Application.Interfaces
         void UpdateDriver(int id, DriverUpdateRequest request, int userId);
         List<DriverDto> GetAllDrivers();
         DriverDto? GetDriverById(int id);
-        bool AddVehicle(int driverId, int vehicleId);
+        bool AddVehicle(int driverId, int vehicleId, int userId);
         List<VehicleDto>? GetAllDriverVehicles(int driverId);
-        bool DeleteDriverVehicle(int driverId, int vehicleId);
+        bool DeleteDriverVehicle(int driverId, int vehicleId, int userId);
         // SACAR EL COMENTADO DESPUES EL METODO EL METODO SIRVE
         //bool AcceptDrive(int driverId, int rideId);
     }

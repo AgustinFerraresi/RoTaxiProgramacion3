@@ -17,7 +17,7 @@ namespace Infrastructure.Data
             _context = context;
         }
 
-        public Vehicle GetFullVehicleById(int id)
+        public Vehicle? GetFullVehicleById(int id)
         {
             //return _context.Vehicles.FirstOrDefault(vehicle => vehicle.Id == id);
             return _context.Vehicles.Include(i => i.Drivers).FirstOrDefault(vehicle => vehicle.Id == id);

@@ -16,7 +16,7 @@ namespace Domain.Classes
         public string Brand { get; set; }
         public int Year { get; set; }
         public string Model { get; set; }
-        public List<Driver> Drivers { get; set; }
+        public List<Driver> Drivers { get; set; } = new List<Driver>();
 
 
         [Key]

@@ -24,13 +24,14 @@ namespace Web.Controllers
             _passangerService = passangerService;
         }
 
-        [HttpPost("[action]")]
+        [HttpPost]
         [AllowAnonymous]
         public IActionResult Create([FromBody] PassengerCreateRequest request)
         {
-            var result = _passangerService.Create(request);
+            var result = _passangerService.CreatePassenger(request);
             return Ok(result);
         }
+
 
         [HttpGet]
         [AllowAnonymous]
@@ -39,13 +40,14 @@ namespace Web.Controllers
             return Ok(_passangerService.GetAll());
         }
 
+
         [HttpGet("id/{id}")]
         [AllowAnonymous]
         public IActionResult GetPassengerById([FromRoute] int id)
         {
             try
             {
-                return Ok(_passangerService.GetById(id));
+                return Ok(_passangerService.GetPassengerById(id));
             }
             catch (NotFoundException ex)
             {
@@ -53,13 +55,29 @@ namespace Web.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult Delete([FromRoute] int id)
+
+        [HttpGet("name/{name}")]
+        [AllowAnonymous]
+        public IActionResult GetPassengerByName(string name)
+        {
+            try
+            {
+                return Ok(_passangerService.GetPassengerByName(name));
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPut("{id}")]
+        public IActionResult UpdatePassenger([FromRoute] int id, [FromBody] PassengerUpdateRequest request)
         {
             try
             {
                 int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
-                _passangerService.Delete(id, userId);
+                _passangerService.UpdatePassenger(id, request, userId);
                 return NoContent();
             }
             catch (Exception ex)
@@ -68,13 +86,14 @@ namespace Web.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] PassengerUpdateRequest request)
+
+        [HttpDelete("{id}")]
+        public IActionResult DeletePassenger([FromRoute] int id)
         {
             try
             {
                 int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
-                _passangerService.Update(id, request, userId);
+                _passangerService.DeletePassenger(id, userId);
                 return NoContent();
             }
             catch (Exception ex)

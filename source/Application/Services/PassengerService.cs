@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Application.Services
 {
@@ -21,20 +22,14 @@ namespace Application.Services
             _passengerRepository = passengerRepository;
         }
 
-        public PassengerDto Create(PassengerCreateRequest request)
+        public PassengerDto CreatePassenger(PassengerCreateRequest request)
         {
             Passenger passenger = new Passenger(request.Name, request.Email, request.Password, request.Dni);
 
             _passengerRepository.Add(passenger);
             return PassengerDto.Create(passenger);
         }
-
-        public void Delete(int id, int userId)
-        {
-            var passenger = _passengerRepository.GetById(id) ?? throw new NotFoundException($"Pasajero {id} no encontrado."); ;
-            if (passenger.Id != userId) throw new NotAllowedException("Acceso denegado.");
-            _passengerRepository.Delete(passenger);
-        }
+        
 
         public List<PassengerDto> GetAll()
         {
@@ -42,15 +37,24 @@ namespace Application.Services
             return passengers.Select(PassengerDto.Create).ToList();
         }
 
-        public PassengerDto? GetById(int id)
+
+        public PassengerDto? GetPassengerById(int id)
         {
-            var passenger = _passengerRepository.GetById(id);
-            return passenger != null ? PassengerDto.Create(passenger) : null;
+            var passenger = _passengerRepository.GetById(id) ?? throw new NotFoundException($"Pasajero {id} no encontrado");
+            return PassengerDto.Create(passenger);
         }
 
-        public void Update(int id, PassengerUpdateRequest request, int userId)
+
+        public PassengerDto? GetPassengerByName(string name)
         {
-            var passenger = _passengerRepository.GetById(id) ?? throw new NotFoundException($"Pasajero {id} no encontrado.");
+            var passenger = _passengerRepository.GetPassengerByName(name) ?? throw new NotFoundException($"Pasajero {name} no encontrado");
+            return PassengerDto.Create(passenger);
+        }
+
+
+        public void UpdatePassenger(int id, PassengerUpdateRequest request, int userId)
+        {
+            var passenger = _passengerRepository.GetById(id) ?? throw new NotFoundException($"Pasajero {id} no encontrado");
             if (passenger.Id != userId) throw new NotAllowedException("Acceso denegado.");
 
             passenger.Name = request.Name ?? passenger.Name;
@@ -60,6 +64,15 @@ namespace Application.Services
             passenger.Description = request.Description ?? passenger.Description;
 
             _passengerRepository.Update(passenger);
+        }
+
+
+        public void DeletePassenger(int id, int userId)
+        {
+            var passenger = _passengerRepository.GetById(id) ?? throw new NotFoundException($"Pasajero {id} no encontrado"); ;
+            if (passenger.Id != userId) throw new NotAllowedException("Acceso denegado.");
+
+            _passengerRepository.Delete(passenger);
         }
     }
 }

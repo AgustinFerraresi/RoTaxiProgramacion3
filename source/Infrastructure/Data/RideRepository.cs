@@ -21,7 +21,7 @@ namespace Infrastructure.Data
         public override List<Ride> GetAll()
         {
             return _context.Rides
-                    .Include(m => m.Passenger)
+                    .Include(r => r.Passenger)
                     .ToList();
         }
 
@@ -30,11 +30,10 @@ namespace Infrastructure.Data
             if (id is int intId)
             {
                 return _context.Rides
-                               .Include(m => m.Passenger)
-                               .FirstOrDefault(m => m.Id == intId);
+                               .Include(r => r.Passenger)
+                               .FirstOrDefault(r => r.Id == intId);
             }
             throw new ArgumentException("Tipo de ID no compatible.");
         }
-
     }
 }
