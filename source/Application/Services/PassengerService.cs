@@ -45,13 +45,6 @@ namespace Application.Services
         }
 
 
-        public PassengerDto? GetPassengerByName(string name)
-        {
-            var passenger = _passengerRepository.GetPassengerByName(name) ?? throw new NotFoundException($"Pasajero {name} no encontrado");
-            return PassengerDto.Create(passenger);
-        }
-
-
         public void UpdatePassenger(int id, PassengerUpdateRequest request, int userId)
         {
             var passenger = _passengerRepository.GetById(id) ?? throw new NotFoundException($"Pasajero {id} no encontrado");

@@ -14,7 +14,6 @@ namespace Application.Interfaces
         PassengerDto CreatePassenger(PassengerCreateRequest request);
         List<PassengerDto> GetAll();
         PassengerDto? GetPassengerById(int id);
-        PassengerDto? GetPassengerByName(string name);
         void UpdatePassenger(int id, PassengerUpdateRequest request, int userId);
         void DeletePassenger(int id, int userId);
     }

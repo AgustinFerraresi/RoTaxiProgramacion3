@@ -19,11 +19,6 @@ namespace Infrastructure.Data
             _context = context;
         }
 
-        public Passenger? GetPassengerByName(string passengerName)
-        {
-            return _context.Passengers.SingleOrDefault(p => p.Name == passengerName);
-        }
-
         public Passenger? AutenticatePassenger(string email, string password)
         {
             return _context.Passengers.SingleOrDefault(p => p.Email == email && p.Password == password);

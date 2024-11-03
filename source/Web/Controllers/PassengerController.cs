@@ -56,21 +56,6 @@ namespace Web.Controllers
         }
 
 
-        [HttpGet("name/{name}")]
-        [AllowAnonymous]
-        public IActionResult GetPassengerByName(string name)
-        {
-            try
-            {
-                return Ok(_passangerService.GetPassengerByName(name));
-            }
-            catch (NotFoundException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-
         [HttpPut("{id}")]
         public IActionResult UpdatePassenger([FromRoute] int id, [FromBody] PassengerUpdateRequest request)
         {
