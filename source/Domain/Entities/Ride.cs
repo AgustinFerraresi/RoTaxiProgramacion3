@@ -21,6 +21,5 @@ namespace Domain.Classes
         public float Cost { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         public string? Message { get; set; }
-
     }
 }

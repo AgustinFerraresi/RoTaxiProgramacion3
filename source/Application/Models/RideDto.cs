@@ -10,7 +10,6 @@ namespace Application.Models
 {
     public class RideDto
     {
-        public int Id { get; set; }
         public string Passenger {  get; set; }
         public string Location { get; set; }
         public string Destination { get; set; }
@@ -22,8 +21,7 @@ namespace Application.Models
         public static RideDto Create(Ride ride)
         {
             var dto = new RideDto();
-            dto.Id = ride.Id;
-            dto.Passenger = ride.Passenger?.Name != null ? ride.Passenger.Name : "Desconocido";
+            dto.Passenger = ride.Passenger.Name;
             dto.Location = ride.Location;
             dto.Destination = ride.Destination;
             dto.Date = ride.Date;

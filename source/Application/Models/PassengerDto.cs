@@ -10,10 +10,7 @@ namespace Application.Models
 {
     public class PassengerDto
     {
-        //aca van todos las props de passenger que voy a querer mostrar
-        public int Id { get; set; }
         public string Name { get; set; }
-        public string Email { get; set; }
         public int Dni { get; set; }
         public string Description { get; set; }
  
@@ -21,9 +18,7 @@ namespace Application.Models
         public static PassengerDto Create(Passenger passenger)
         {
             var dto = new PassengerDto();
-            dto.Id = passenger.Id;
             dto.Name = passenger.Name;
-            dto.Email = passenger.Email;
             dto.Dni = passenger.Dni;
             dto.Description = passenger.Description;            
       

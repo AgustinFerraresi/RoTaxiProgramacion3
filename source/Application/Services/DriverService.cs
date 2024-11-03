@@ -31,7 +31,7 @@ namespace Application.Services
             return DriverDto.Create(newDriver);
         }
 
-        //en cada uno de los metodos se puede usar logica adicional para hacer verificaciones y demas cosas si fuese necesario
+
         public void DeleteDriver(int id, int userId)
         {
             var driver = _driverRepository.GetById(id) ?? throw new NotFoundException($"Conductor {id} no encontrado."); ;
@@ -111,13 +111,12 @@ namespace Application.Services
 
             if (driver.Id != userId)
             {
-                throw new UnauthorizedAccessException("Solo el propietario del vehículo puede eliminarlo.");
+                throw new UnauthorizedAccessException("Acceso denegado");
             }
 
             if (driver._vehicles.Contains(vehicle))
             {
                 _driverRepository.DeleteVehicle(driver,vehicle);//elimino un vehiculo de un conductor
-                //_vehicleRepository.DeleteDriverFromVehicle(vehicle, driver);//elimino un conductor de un vehiculo
                 return true;
             }
             return false;
@@ -128,12 +127,13 @@ namespace Application.Services
         {
             var ride = _rideRepository.GetById(rideId);
             Driver? driver = _driverRepository.GetFullDriverById(driverId);
-            if (driver.Id != userId) throw new NotAllowedException("Acceso denegado.");
 
             if (driver == null || ride == null || driver.Available == false)
             {
                 return false;
             }
+            if (driver.Id != userId) return false;
+
             _driverRepository.AcceptRide(driver);
             return true;
         }
@@ -142,7 +142,7 @@ namespace Application.Services
         public bool EndRide(int driverId, int userId)
         {
             Driver? driver = _driverRepository.GetFullDriverById(driverId);
-            if (driver.Id != userId) throw new NotAllowedException("Acceso denegado.");
+            if (driver.Id != userId) return false;
 
             if (driver == null || driver.Available == true)
             {

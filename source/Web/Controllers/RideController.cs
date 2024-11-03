@@ -35,13 +35,16 @@ namespace Web.Controllers
 
             int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
             var result = _rideService.CreateRide(request, userId);
-            return CreatedAtAction(nameof(GetById), new { id = result.Id }, result);
+            return Ok(result);  
         }
 
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public IActionResult GetAll()
         {
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
+            if (userRole != "Driver") return BadRequest("Acceso denegado");
+
             return Ok(_rideService.GetAll());
         }
 
@@ -60,18 +63,15 @@ namespace Web.Controllers
         }
 
 
-        [HttpGet("passengerName/{passengerName}")]
-        public IActionResult GetRidesByPassenger(string passengerName)
+        [HttpGet("[action]/{passengerId}")]
+        public IActionResult GetRidesByPassenger(int passengerId)
         {
-            try
-            {
-                var rides = _rideService.GetRidesByPassenger(passengerName);
-                return Ok(rides);
-            }
-            catch (NotFoundException ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
+            int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+
+            if (userRole != "Passenger" || userId != passengerId) return BadRequest("Acceso denegado");
+            var rides = _rideService.GetRidesByPassenger(passengerId);
+            return Ok(rides);
         }
 
 

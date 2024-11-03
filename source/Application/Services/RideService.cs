@@ -7,6 +7,7 @@ using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -56,11 +57,10 @@ namespace Application.Services
         }
 
 
-        public List<RideDto> GetRidesByPassenger(string passengerName)
+        public List<RideDto> GetRidesByPassenger(int passengerId)
         {
-            var passenger = _passengerRepository.GetPassengerByName(passengerName) ?? throw new NotFoundException($"Pasajero {passengerName} no encontrado");
-
-            var rides = _rideRepository.GetAll().Where(r => r.Passenger.Name == passengerName).ToList();
+            var passenger = _passengerRepository.GetById(passengerId) ?? throw new NotFoundException($"Pasajero no encontrado");
+            var rides = _rideRepository.GetAll().Where(rides => rides.Passenger.Id == passengerId).ToList();
             return rides.Select(RideDto.Create).ToList();
         }
 
@@ -69,7 +69,7 @@ namespace Application.Services
         {
             Passenger authenticatedPassenger = _passengerRepository.GetById(userId);
 
-            var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Viaje {id} no encontrado");
+            var ride = _rideRepository.GetById(id) ?? throw new NotFoundException("Viaje no encontrado");
             if (ride.Passenger.Id != authenticatedPassenger.Id) throw new NotAllowedException("Acceso denegado.");
 
             ride.Location = request.Location ?? ride.Location;
