@@ -1,5 +1,3 @@
-"# RoTaxiProgramacion3" 
-
 # RoTaxi  
 An app for requesting taxis that includes passenger and driver roles.  
 
