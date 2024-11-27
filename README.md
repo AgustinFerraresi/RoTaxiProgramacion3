@@ -49,7 +49,7 @@ An app for requesting taxis that includes passenger and driver roles.
 This is the back end of the RoTaxi app, developed using .NET, Clean Architecture and the Repository Pattern.  
 (If you'd like to see the front-end code, you can find it [here](https://github.com/AgustinFerraresi/RoTaxi-Front-End.git)).  
 
-# How to Use  
+# How to log in?  
 Users must log in by entering their email, password, and role.  
 If they don't have an account, they can create one to become a passenger or a driver.  
 
