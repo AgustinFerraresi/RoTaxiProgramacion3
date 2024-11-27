@@ -1,7 +1,5 @@
 # Español
 
-# 
-
 # RoTaxi
 Una aplicación para solicitar taxis que incluye roles de pasajero y conductor.
 
