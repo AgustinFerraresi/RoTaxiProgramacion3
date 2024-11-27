@@ -33,10 +33,9 @@ Si no tienen una cuenta, pueden crear una para convertirse en pasajero o conduct
 - Eliminar un vehículo
 - Editar la información del vehículo
 
+# 
 
 # English
-
-# 
 
 # RoTaxi  
 An app for requesting taxis that includes passenger and driver roles.  
