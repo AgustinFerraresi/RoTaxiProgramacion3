@@ -26,7 +26,7 @@ namespace Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult Create([FromBody] PassengerCreateRequest request)
+        public IActionResult CreatePassenger([FromBody] PassengerCreateRequest request)
         {
             var result = _passangerService.CreatePassenger(request);
             return Ok(result);
@@ -35,7 +35,7 @@ namespace Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult GetAll()
+        public IActionResult GetAllPassengers()
         {
             return Ok(_passangerService.GetAll());
         }

@@ -31,7 +31,7 @@ namespace Infrastructure.Services
         public string Autenticar(AuthenticationRequest authenticationRequest)
         {
 
-            var user = ValidatePassenger(authenticationRequest);
+            var user = ValidateUser(authenticationRequest);
            
             if (user == null)
             {
@@ -75,7 +75,7 @@ namespace Infrastructure.Services
             return tokenToReturn.ToString();
         }
 
-        private User? ValidatePassenger(AuthenticationRequest authenticationRequest)
+        private User? ValidateUser(AuthenticationRequest authenticationRequest)
         {
             if (string.IsNullOrEmpty(authenticationRequest.Email) || string.IsNullOrEmpty(authenticationRequest.Password))
                 return null;

@@ -26,7 +26,7 @@ namespace Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public IActionResult Create([FromBody] DriverCreateRequest request)
+        public IActionResult CreateDriver([FromBody] DriverCreateRequest request)
         {
             var result = _driverService.CreateDriver(request);
             return Ok(result);
@@ -35,7 +35,7 @@ namespace Web.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult GetAll()
+        public IActionResult GetAllDrivers()
         {
             return Ok(_driverService.GetAllDrivers());
         }
@@ -49,6 +49,22 @@ namespace Web.Controllers
                 return Ok(_driverService.GetDriverById(id));
             }
             catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpPut("[action]/{id}")]
+        public IActionResult UpdateDriver([FromRoute] int id, [FromBody] DriverUpdateRequest request)
+        {
+            try
+            {
+                int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
+                _driverService.UpdateDriver(id, request, userId);
+                return Ok("Conductor actualizado correctamente.");
+            }
+            catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
@@ -71,24 +87,8 @@ namespace Web.Controllers
         }
 
 
-        [HttpPut("[action]/{id}")]
-        public IActionResult UpdateDriver([FromRoute]  int id, [FromBody] DriverUpdateRequest request) 
-        {
-            try
-            {
-                int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
-                _driverService.UpdateDriver(id, request, userId);
-                return Ok("Conductor actualizado correctamente.");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-
         [HttpGet("[action]/{driverId}")]
-        public IActionResult GetDriverVehicles(int driverId)
+        public IActionResult GetAllDriverVehicles(int driverId)
         {
             var result = _driverService.GetAllDriverVehicles(driverId);
             if (result == null)
@@ -104,7 +104,7 @@ namespace Web.Controllers
 
 
         [HttpPost("[action]/{driverId}/{vehicleId}")]
-        public IActionResult AddVehicle(int driverId, int vehicleId)
+        public IActionResult AddDriverToVehicle(int driverId, int vehicleId)
         {
             try
             {
@@ -121,7 +121,7 @@ namespace Web.Controllers
 
 
         [HttpPost("[action]/{driverId}/{vehicleId}")]
-        public IActionResult DeleteDriverVehicle(int driverId, int vehicleId)
+        public IActionResult DeleteDriverToVehicle(int driverId, int vehicleId)
         {
             try
             {
@@ -137,7 +137,7 @@ namespace Web.Controllers
 
         
        [HttpPost("[action]/{driverId}/{rideId}")]
-       public IActionResult TakeARide(int driverId, int rideId)
+       public IActionResult TakeRide(int driverId, int rideId)
        {
             int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
             var result = _driverService.AcceptRide(driverId, rideId, userId);

@@ -40,7 +40,7 @@ namespace Web.Controllers
 
 
         [HttpGet("[action]")]
-        public IActionResult GetAll()
+        public IActionResult GetAllRides()
         {
             var userRole = User.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
             if (userRole != "Driver") return BadRequest("Acceso denegado");
@@ -50,7 +50,7 @@ namespace Web.Controllers
 
 
         [HttpGet("id/{id}")]
-        public IActionResult GetById(int id)
+        public IActionResult GetRideById(int id)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace Web.Controllers
 
 
         [HttpPut("{id}")]
-        public IActionResult Update([FromRoute] int id, [FromBody] RideUpdateRequest request)
+        public IActionResult UpdateRide([FromRoute] int id, [FromBody] RideUpdateRequest request)
         {
             try
             {
@@ -92,7 +92,7 @@ namespace Web.Controllers
 
 
         [HttpDelete("{id}")]
-        public IActionResult Delete([FromRoute] int id)
+        public IActionResult DeleteRide([FromRoute] int id)
         {
             try
             {
