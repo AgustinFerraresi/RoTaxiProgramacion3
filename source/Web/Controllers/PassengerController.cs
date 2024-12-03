@@ -1,6 +1,6 @@
 ﻿using Application.Interfaces;
 using Application.Models.Request;
-using Domain.Classes;
+using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -37,7 +37,7 @@ namespace Web.Controllers
         [AllowAnonymous]
         public IActionResult GetAllPassengers()
         {
-            return Ok(_passangerService.GetAll());
+            return Ok(_passangerService.GetAllPassengers());
         }
 
 

@@ -1,4 +1,4 @@
-﻿using Domain.Classes;
+﻿using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -24,7 +24,7 @@ namespace Infrastructure.Data
         }
 
 
-        public List<Driver> GetDrivers(Vehicle vehicle)
+        public List<Driver> GetDriversVehicle(Vehicle vehicle)
         {
             List<Driver> drivers = vehicle.Drivers;
             return drivers;

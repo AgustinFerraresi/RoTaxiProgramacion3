@@ -1,4 +1,4 @@
-﻿using Domain.Classes;
+﻿using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -33,7 +33,7 @@ namespace Infrastructure.Data
             return vehicles;
         }
 
-        public void AddVehicle(Driver driver, Vehicle vehicle)
+        public void AddDriverToVehicle(Driver driver, Vehicle vehicle)
         {
             driver._vehicles.Add(vehicle);
             _context.SaveChanges();
@@ -47,22 +47,20 @@ namespace Infrastructure.Data
 
         public Driver? AutenticarDriver(string email, string password)
         {
-            return _context.Drivers.SingleOrDefault(u => u.Email == email && u.Password == password);
+            return _context.Drivers.SingleOrDefault(d => d.Email == email && d.Password == password);
 
         }
 
-        public void AcceptRide(Driver driver)
+        public void TakeRide(Driver driver)
         {
             driver.Available = false;
             _context.SaveChanges();
         }
 
-        public void EndRide(Driver driver)
+        public void FinishRide(Driver driver)
         {
             driver.Available = true;
             _context.SaveChanges();
         }
-
-
     }
 }

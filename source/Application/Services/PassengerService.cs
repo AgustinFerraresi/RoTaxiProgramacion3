@@ -1,7 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Models;
 using Application.Models.Request;
-using Domain.Classes;
+using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
 using System;
@@ -31,7 +31,7 @@ namespace Application.Services
         }
         
 
-        public List<PassengerDto> GetAll()
+        public List<PassengerDto> GetAllPassengers()
         {
             var passengers = _passengerRepository.GetAll();
             return passengers.Select(PassengerDto.Create).ToList();

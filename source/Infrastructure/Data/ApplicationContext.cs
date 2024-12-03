@@ -1,4 +1,4 @@
-﻿using Domain.Classes;
+﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,6 @@ namespace Infrastructure.Data
 {
     public class ApplicationContext : DbContext
     {
-
         public DbSet<Passenger> Passengers { get; set; }
         public DbSet<Driver> Drivers { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
@@ -18,6 +17,5 @@ namespace Infrastructure.Data
         public ApplicationContext(DbContextOptions<ApplicationContext> options) : base(options)
         {
         }
-
     }
 }

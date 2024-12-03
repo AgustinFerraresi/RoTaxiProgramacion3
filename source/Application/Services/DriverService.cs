@@ -1,7 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Models;
 using Application.Models.Request;
-using Domain.Classes;
+using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
 using System;
@@ -32,12 +32,19 @@ namespace Application.Services
         }
 
 
-        public void DeleteDriver(int id, int userId)
+        public List<DriverDto> GetAllDrivers()
         {
-            var driver = _driverRepository.GetById(id) ?? throw new NotFoundException($"Conductor {id} no encontrado."); ;
-            if (driver.Id != userId) throw new NotAllowedException("Acceso denegado.");
-            _driverRepository.Delete(driver);
+            var driver = _driverRepository.GetAll();
+            return driver.Select(DriverDto.Create).ToList();
         }
+
+
+        public DriverDto? GetDriverById(int id)
+        {
+            var driver = _driverRepository.GetById(id) ?? throw new NotFoundException($"Conductor {id} no encontrado");
+            return DriverDto.Create(driver);
+        }
+
 
         public void UpdateDriver(int id, DriverUpdateRequest request, int userId)
         {
@@ -53,34 +60,11 @@ namespace Application.Services
             _driverRepository.Update(driver);
         }
 
-
-        public List<DriverDto> GetAllDrivers()
+        public void DeleteDriver(int id, int userId)
         {
-            var driver = _driverRepository.GetAll();
-            return driver.Select(DriverDto.Create).ToList();
-        }
-
-
-        public DriverDto? GetDriverById(int id)
-        {
-            var driver = _driverRepository.GetById(id) ?? throw new NotFoundException($"Conductor {id} no encontrado");
-            return DriverDto.Create(driver);
-        }
-
-
-        public bool AddVehicle(int driverId, int vehicleId, int userId)
-        {
-            Driver driver = _driverRepository.GetById(driverId) ?? throw new NotFoundException($"Conductor no encontrado.");
+            var driver = _driverRepository.GetById(id) ?? throw new NotFoundException($"Conductor {id} no encontrado."); ;
             if (driver.Id != userId) throw new NotAllowedException("Acceso denegado.");
-
-            Vehicle vehicle = _vehicleRepository.GetFullVehicleById(vehicleId) ?? throw new NotFoundException($"Vehículo {vehicleId} no encontrado.");
-
-            if (!driver._vehicles.Contains(vehicle))
-            {
-                _driverRepository.AddVehicle(driver, vehicle); //agrego un vehiculo a un conductor
-                return true;
-            }
-            return false;
+            _driverRepository.Delete(driver);
         }
 
 
@@ -100,8 +84,23 @@ namespace Application.Services
             return driverVehiclesMapped;
         }
 
+        public bool AddDriverToVehicle(int driverId, int vehicleId, int userId)
+        {
+            Driver driver = _driverRepository.GetById(driverId) ?? throw new NotFoundException($"Conductor no encontrado.");
+            if (driver.Id != userId) throw new NotAllowedException("Acceso denegado.");
 
-        public bool DeleteDriverVehicle(int driverId, int vehicleId, int userId)
+            Vehicle vehicle = _vehicleRepository.GetFullVehicleById(vehicleId) ?? throw new NotFoundException($"Vehículo {vehicleId} no encontrado.");
+
+            if (!driver._vehicles.Contains(vehicle))
+            {
+                _driverRepository.AddDriverToVehicle(driver, vehicle); //agrego un vehiculo a un conductor
+                return true;
+            }
+            return false;
+        }
+
+
+        public bool DeleteDriverToVehicle(int driverId, int vehicleId, int userId)
         {
             Driver driver = _driverRepository.GetFullDriverById(driverId);
             Vehicle vehicle = _vehicleRepository.GetFullVehicleById(vehicleId);
@@ -123,7 +122,7 @@ namespace Application.Services
         }
 
 
-        public bool AcceptRide(int driverId, int rideId, int userId)
+        public bool TakeRide(int driverId, int rideId, int userId)
         {
             var ride = _rideRepository.GetById(rideId);
             Driver? driver = _driverRepository.GetFullDriverById(driverId);
@@ -134,12 +133,12 @@ namespace Application.Services
             }
             if (driver.Id != userId) return false;
 
-            _driverRepository.AcceptRide(driver);
+            _driverRepository.TakeRide(driver);
             return true;
         }
 
 
-        public bool EndRide(int driverId, int userId)
+        public bool FinishRide(int driverId, int userId)
         {
             Driver? driver = _driverRepository.GetFullDriverById(driverId);
             if (driver.Id != userId) return false;
@@ -148,7 +147,7 @@ namespace Application.Services
             {
                 return false;
             }
-            _driverRepository.EndRide(driver);
+            _driverRepository.FinishRide(driver);
             return true;
         }
     }

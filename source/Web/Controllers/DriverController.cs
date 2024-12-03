@@ -3,7 +3,7 @@ using Application.Models;
 ﻿using System.Security.Claims;
 using Application.Models.Request;
 using Application.Services;
-using Domain.Classes;
+using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -110,7 +110,7 @@ namespace Web.Controllers
             {
                 int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
 
-                var result = _driverService.AddVehicle(driverId, vehicleId, userId);
+                var result = _driverService.AddDriverToVehicle(driverId, vehicleId, userId);
                 return result ? Ok("Vehiculo agregado") : BadRequest("Error al agregar vehiculo.");
             }
             catch(Exception ex)
@@ -126,7 +126,7 @@ namespace Web.Controllers
             try
             {
                 int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
-                var result = _driverService.DeleteDriverVehicle(driverId, vehicleId, userId);
+                var result = _driverService.DeleteDriverToVehicle(driverId, vehicleId, userId);
                 return result ? Ok("Vehiculo eliminado correctamente.") : BadRequest("Error al eliminar el vehículo");
             }
             catch (Exception ex) 
@@ -140,7 +140,7 @@ namespace Web.Controllers
        public IActionResult TakeRide(int driverId, int rideId)
        {
             int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
-            var result = _driverService.AcceptRide(driverId, rideId, userId);
+            var result = _driverService.TakeRide(driverId, rideId, userId);
             if (result == true)
             {
                 return Ok("viaje aceptado correctamente");
@@ -153,7 +153,7 @@ namespace Web.Controllers
         public IActionResult FinishRide(int driverId)
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
-            var result = _driverService.EndRide(driverId, userId);
+            var result = _driverService.FinishRide(driverId, userId);
             if (result == true)
             {
                 return Ok("viaje terminado o cancelado correctamente");

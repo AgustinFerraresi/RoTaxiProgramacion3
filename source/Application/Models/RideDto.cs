@@ -1,4 +1,4 @@
-﻿using Domain.Classes;
+﻿using Domain.Entities;
 using Domain.Enums;
 using System;
 using System.Collections.Generic;
@@ -10,6 +10,7 @@ namespace Application.Models
 {
     public class RideDto
     {
+        public int Id { get; set; }
         public string Passenger {  get; set; }
         public string Location { get; set; }
         public string Destination { get; set; }
@@ -21,6 +22,7 @@ namespace Application.Models
         public static RideDto Create(Ride ride)
         {
             var dto = new RideDto();
+            dto.Id = ride.Id;
             dto.Passenger = ride.Passenger.Name;
             dto.Location = ride.Location;
             dto.Destination = ride.Destination;

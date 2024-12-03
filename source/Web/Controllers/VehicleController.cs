@@ -2,7 +2,7 @@
 using Application.Interfaces;
 using Application.Models;
 using Application.Models.Request;
-using Domain.Classes;
+using Domain.Entities;
 using Domain.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -26,7 +26,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateVehicle([FromBody] CreateVehicleRequest request)
+        public IActionResult CreateVehicle([FromBody] VehicleCreateRequest request)
         {
             int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
             var userRole = User.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
@@ -68,7 +68,7 @@ namespace Web.Controllers
         [HttpGet("[action]/{vehicleId}")]
         public IActionResult GetDriversVehicle(int vehicleId)
         {
-            List<DriverDto>? driversList = _vehicleService.GetAllDrivers(vehicleId);
+            List<DriverDto>? driversList = _vehicleService.GetVehicleDrivers(vehicleId);
 
             if (driversList == null)
             {

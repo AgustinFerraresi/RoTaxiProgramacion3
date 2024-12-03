@@ -1,4 +1,4 @@
-﻿using Domain.Classes;
+﻿using Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +11,6 @@ namespace Domain.Interfaces
     {
         //Vehicle GetVehicleById(int id);
         Vehicle? GetFullVehicleById(int id);
-        List<Driver> GetDrivers(Vehicle vehicle);
+        List<Driver> GetDriversVehicle(Vehicle vehicle);
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Application.Models;
 using Application.Models.Request;
-using Domain.Classes;
+using Domain.Entities;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -13,14 +13,14 @@ namespace Application.Interfaces
     public interface IDriverService
     {
         DriverDto CreateDriver(DriverCreateRequest request);
-        void DeleteDriver(int id, int userId);
-        void UpdateDriver(int id, DriverUpdateRequest request, int userId);
         List<DriverDto> GetAllDrivers();
         DriverDto? GetDriverById(int id);
-        bool AddVehicle(int driverId, int vehicleId, int userId);
+        void UpdateDriver(int id, DriverUpdateRequest request, int userId);
+        void DeleteDriver(int id, int userId);
         List<VehicleDto>? GetAllDriverVehicles(int driverId);
-        bool DeleteDriverVehicle(int driverId, int vehicleId, int userId);
-        bool AcceptRide(int driverId, int rideId, int userId);
-        bool EndRide(int driverId, int userId);
+        bool AddDriverToVehicle(int driverId, int vehicleId, int userId);
+        bool DeleteDriverToVehicle(int driverId, int vehicleId, int userId);
+        bool TakeRide(int driverId, int rideId, int userId);
+        bool FinishRide(int driverId, int userId);
     }
 }

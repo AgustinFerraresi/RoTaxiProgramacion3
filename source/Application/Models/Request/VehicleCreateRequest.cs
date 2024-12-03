@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 namespace Application.Models.Request
 {
     //este dto es el que estará en el controller para crear un vehiculo
-    public class CreateVehicleRequest
+    public class VehicleCreateRequest
     {
         //estos parametros seran rellenados por el usurio
         [Required]
-        public string brand { get; set; }
+        public string Brand { get; set; }
         [Required]
-        public int year { get; set; }
+        public int Year { get; set; }
         [Required]
-        public string model { get; set; }
+        public string Model { get; set; }
     }
 }

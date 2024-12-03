@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Application.Interfaces;
 using Application.Models.Request;
-using Domain.Classes;
+using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
 using Microsoft.Extensions.Options;

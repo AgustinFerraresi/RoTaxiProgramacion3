@@ -1,6 +1,6 @@
 ﻿using Application.Models;
 using Application.Models.Request;
-using Domain.Classes;
+using Domain.Entities;
 using Domain.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -13,10 +13,10 @@ namespace Application.Interfaces
     public interface IRideService
     {
         RideDto CreateRide(RideCreateRequest request, int userId);
-        List<RideDto> GetAll();
-        RideDto? GetById(int id);
+        List<RideDto> GetAllRides();
+        RideDto? GetRideById(int id);
         List<RideDto> GetRidesByPassenger(int passengerId);
-        void Update(int id, RideUpdateRequest request, int userId);
-        void Delete(int id, int userId);
+        void UpdateRide(int id, RideUpdateRequest request, int userId);
+        void DeleteRide(int id, int userId);
     }
 }

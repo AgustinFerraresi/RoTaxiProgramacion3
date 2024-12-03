@@ -3,7 +3,7 @@ using Application.Interfaces;
 using Application.Models;
 using Application.Models.Request;
 using Application.Services;
-using Domain.Classes;
+using Domain.Entities;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -45,7 +45,7 @@ namespace Web.Controllers
             var userRole = User.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
             if (userRole != "Driver") return BadRequest("Acceso denegado");
 
-            return Ok(_rideService.GetAll());
+            return Ok(_rideService.GetAllRides());
         }
 
 
@@ -54,7 +54,7 @@ namespace Web.Controllers
         {
             try
             {
-                return Ok(_rideService.GetById(id));
+                return Ok(_rideService.GetRideById(id));
             }
             catch (NotFoundException ex)
             {
@@ -81,7 +81,7 @@ namespace Web.Controllers
             try
             {
                 int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
-                _rideService.Update(id, request, userId);
+                _rideService.UpdateRide(id, request, userId);
                 return NoContent();
             }
             catch (Exception ex)
@@ -97,7 +97,7 @@ namespace Web.Controllers
             try
             {
                 int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value ?? "");
-                _rideService.Delete(id, userId);
+                _rideService.DeleteRide(id, userId);
                 return NoContent();
             }
             catch (Exception ex)

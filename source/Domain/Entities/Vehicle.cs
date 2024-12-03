@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Domain.Classes
+namespace Domain.Entities
 {
     public class Vehicle
     {

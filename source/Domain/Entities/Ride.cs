@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Classes
+namespace Domain.Entities
 {
     public class Ride
     {

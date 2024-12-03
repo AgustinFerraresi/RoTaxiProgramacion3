@@ -1,7 +1,7 @@
 ﻿using Application.Interfaces;
 using Application.Models;
 using Application.Models.Request;
-using Domain.Classes;
+using Domain.Entities;
 using Domain.Exceptions;
 using Domain.Interfaces;
 using System;
@@ -43,14 +43,14 @@ namespace Application.Services
         }
 
 
-        public List<RideDto> GetAll()
+        public List<RideDto> GetAllRides()
         {
             var rides = _rideRepository.GetAll();
             return rides.Select(RideDto.Create).ToList();
         } 
 
 
-        public RideDto? GetById(int id)
+        public RideDto? GetRideById(int id)
         {
             var ride = _rideRepository.GetById(id) ?? throw new NotFoundException($"Viaje {id} no encontrado");
             return RideDto.Create(ride);
@@ -65,7 +65,7 @@ namespace Application.Services
         }
 
 
-        public void Update(int id, RideUpdateRequest request, int userId)
+        public void UpdateRide(int id, RideUpdateRequest request, int userId)
         {
             Passenger authenticatedPassenger = _passengerRepository.GetById(userId);
 
@@ -83,7 +83,7 @@ namespace Application.Services
         }
 
 
-        public void Delete(int id, int userId)
+        public void DeleteRide(int id, int userId)
         {
             Passenger authenticatedPassenger = _passengerRepository.GetById(userId);
 
