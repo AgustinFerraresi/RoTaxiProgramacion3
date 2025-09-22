@@ -25,7 +25,7 @@ namespace Web.Controllers
         }
 
         [HttpPost]
-        [AllowAnonymous]
+        [AllowAnonymous] // para poder ingresar sin estar autorizado
         public IActionResult CreatePassenger([FromBody] PassengerCreateRequest request)
         {
             var result = _passangerService.CreatePassenger(request);

@@ -45,7 +45,7 @@ namespace Web.Controllers
             var userRole = User.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
             if (userRole != "Driver") return BadRequest("Acceso denegado");
 
-            return Ok(_rideService.GetAllRides());
+            return Ok(_rideService.GetAllRides()); //solo devuelve un resultado HTTP, sin tipo fuerte.
         }
 
 
