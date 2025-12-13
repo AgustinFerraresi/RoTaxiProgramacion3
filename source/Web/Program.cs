@@ -42,6 +42,8 @@ builder.Services.AddSwaggerGen(setupAction =>
                 }, new List<string>() }
     });
 });
+/**/
+//Solo se usa como ejemplo para saber como funciona EFCORE
 
 var connection = new SqliteConnection("Data Source = DB-RoTaxiApp.db");
 connection.Open();
@@ -51,6 +53,7 @@ using (var command = connection.CreateCommand())
     command.CommandText = "PRAGMA journal_mode = DELETE;";
     command.ExecuteNonQuery();
 }
+/**/
 
 builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlite(connection));
 
